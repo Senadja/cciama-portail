@@ -1,9 +1,10 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { queryClient } from '@/lib/queryClient';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useLangStore } from '@/stores/useLangStore';
 
 // Layouts & shell components
 import { GovHeader, GovFooter } from '@/layouts/PublicLayout';
@@ -75,6 +76,15 @@ function PublicLayout() {
 }
 
 export default function App() {
+  const lang = useLangStore(s => s.lang);
+
+  // Arabe → écriture de droite à gauche (RTL) ; autres langues → LTR.
+  useEffect(() => {
+    const el = document.documentElement;
+    el.lang = lang.toLowerCase();
+    el.dir = lang === 'AR' ? 'rtl' : 'ltr';
+  }, [lang]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <MotionConfig reducedMotion="user">

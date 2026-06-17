@@ -1,27 +1,17 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, FileText, Search as SearchIcon, FileDown, CreditCard, Calendar } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Marquee } from '@/components/Marquee';
-import { useHomeContent, usePlatformSettings, useNews, useQuickActions, useOrganisms, useServiceCatalogue } from '@/hooks/useCms';
+import { useHomeContent, usePlatformSettings, useNews, useOrganisms, useServiceCatalogue } from '@/hooks/useCms';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
-
-const qIcons: Record<string, React.ReactElement> = {
-  doc: <FileText size={22} />,
-  track: <SearchIcon size={22} />,
-  form: <FileDown size={22} />,
-  pay: <CreditCard size={22} />,
-  appoint: <Calendar size={22} />,
-};
 
 export function HomePage() {
   const { data: home } = useHomeContent();
   const { data: settings } = usePlatformSettings();
   const { data: newsData } = useNews();
   const NEWS = newsData ?? [];
-  const { data: quickData } = useQuickActions();
-  const QUICK = quickData ?? [];
   const { data: orgData } = useOrganisms();
   const ORGANISMS = (orgData ?? []).filter(o => o.kind === 'organism');
   const PARTNERS = (orgData ?? []).filter(o => o.kind === 'partner');
@@ -66,7 +56,7 @@ export function HomePage() {
               >
                 {!heroImage && <div className="placeholder-stripe" />}
               </div>
-              <div className="img-tag">{heroImage ? "[ photo institutionnelle personnalisée ]" : "[ photo institutionnelle · espace à personnaliser ]"}</div>
+              {!heroImage && <div className="img-tag">[ photo institutionnelle · espace à personnaliser ]</div>}
               <img className="feature-watermark" src={logoUrl} alt="" />
               <div className="hero-feature-content">
                 <motion.div className="hero-eyebrow" variants={fadeUp}>
@@ -119,25 +109,6 @@ export function HomePage() {
                 </Link>
               </div>
             </aside>
-          </div>
-        </div>
-      </section>
-
-      {/* Quick Services */}
-      <section className="qservices" aria-label="Démarches en accès rapide">
-        <div className="container" style={{ padding: 0 }}>
-          <div className="qservices-grid">
-            {QUICK.map((q, i) => (
-              <Link key={i} to={q.link || (q.ic === 'track' ? '/tracker' : '/services')} className="qsvc">
-                <div className="qsvc-ic">
-                  {qIcons[q.ic]}
-                </div>
-                <div>
-                  <h3>{q.title}</h3>
-                  <p>{q.desc}</p>
-                </div>
-              </Link>
-            ))}
           </div>
         </div>
       </section>

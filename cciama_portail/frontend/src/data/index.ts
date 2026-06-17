@@ -120,10 +120,9 @@ export const NAV_ITEMS = [
     { id: 'institution-organismes', label: "Organismes et Structures sous tutelle", path: '/institution/organismes' },
     { id: 'institution-projets', label: "Projets et Programmes", path: '/institution/projets' },
   ]},
-  { id: 'services', label: 'Services aux entreprises', path: '/services' },
+  { id: 'services', label: 'Services', path: '/services' },
   { id: 'actualites', label: 'Actualités & Événements', path: '/actualites' },
   { id: 'documentation', label: 'Documentation', path: '/documentation' },
-  { id: 'contact', label: 'Contact', path: '/contact' },
 ];
 
 export const LANGS = [

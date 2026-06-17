@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { applyGoogleTranslation } from '@/lib/translate';
 
 type Lang = 'FR' | 'AR' | 'EN';
 
@@ -10,9 +11,14 @@ interface LangState {
 
 export const useLangStore = create<LangState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       lang: 'FR',
-      setLang: (lang) => set({ lang }),
+      setLang: (lang) => {
+        if (lang === get().lang) return;
+        set({ lang });
+        // Traduit toute la page via le widget Google (recharge la page).
+        applyGoogleTranslation(lang);
+      },
     }),
     { name: 'cciama-lang' }
   )

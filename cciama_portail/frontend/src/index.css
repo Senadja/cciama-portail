@@ -1201,6 +1201,9 @@
 .marquee-section {
   padding: 36px 0 48px;
 }
+/* Resserre l'écart entre deux marquees consécutifs (organismes / partenaires) */
+.marquee-section:has(+ .marquee-section) { padding-bottom: 8px; }
+.marquee-section + .marquee-section { padding-top: 8px; }
 .marquee-head {
   display: flex;
   justify-content: space-between;
@@ -2705,3 +2708,14 @@
   .flash-item { text-overflow: clip; overflow: visible; width: max-content; }
   .flash-item.is-current { animation: mobile-marquee 12s linear infinite; }
 }
+
+/* ===== Google Translate : on masque l'UI par défaut (on pilote via notre sélecteur) ===== */
+#google_translate_element { display: none !important; }
+.goog-te-banner-frame,
+.goog-te-gadget,
+.goog-te-balloon-frame,
+#goog-gt-tt,
+.goog-te-spinner-pos { display: none !important; }
+.skiptranslate iframe { display: none !important; }
+body { top: 0 !important; }
+font.goog-text-highlight { background: none !important; box-shadow: none !important; }
