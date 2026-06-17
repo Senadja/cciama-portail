@@ -1,0 +1,253 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 1. Platform-wide Settings (Global configurations)
+model PlatformSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String   @db.Text
+  type        String // 'text' | 'image' | 'number' | 'boolean' | 'json'
+  label       String
+  description String?  @db.Text
+  updatedBy   String
+  updatedAt   DateTime @updatedAt
+}
+
+// 2. Home Page Content (Singleton)
+model HomePageContent {
+  id           String   @id @default("singleton")
+  heroEyebrow  String   @db.Text
+  heroTitle    String   @db.Text
+  heroDesc     String   @db.Text
+  heroCtaText  String
+  heroCtaLink  String
+  heroImage    String // MinIO storage path
+  missionEye   String
+  missionTitle String   @db.Text
+  missionDesc  String   @db.Text
+  stats        Json // array structure: [{ num: "23", sup: "", label: "Délégations" }]
+  updatedBy    String
+  updatedAt    DateTime @updatedAt
+}
+
+// 3. Minister Word Page Content (Singleton)
+model MinisterWordContent {
+  id           String   @id @default("singleton")
+  eyebrow      String   @db.Text
+  title        String   @db.Text
+  lead         String   @db.Text
+  name         String
+  role         String
+  portrait     String // MinIO storage path
+  welcomeTitle String   @db.Text
+  para1        String   @db.Text
+  para2        String   @db.Text
+  quote        String   @db.Text
+  para3        String   @db.Text
+  bioFile      String // MinIO PDF storage path
+  updatedBy    String
+  updatedAt    DateTime @updatedAt
+}
+
+// 4. Missions list (Ordered)
+model InstitutionMission {
+  id         String   @id @default(uuid())
+  num        String // e.g., '01', '02'
+  title      String
+  desc       String   @db.Text
+  orderIndex Int
+  updatedBy  String
+  updatedAt  DateTime @updatedAt
+}
+
+// 5. Hierarchy of Organigram (Assemblée -> Bureau -> Directions)
+model OrganigramNode {
+  id         String           @id @default(uuid())
+  role       String // position/type e.g. 'Direction', 'Secrétariat Général'
+  name       String // name of the unit e.g. 'Direction des Formalités'
+  parentId   String?
+  parent     OrganigramNode?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  children   OrganigramNode[] @relation("ParentChild")
+  orderIndex Int
+  updatedBy  String
+  updatedAt  DateTime         @updatedAt
+}
+
+// 6. Centralized Media Assets
+model MediaAsset {
+  id         String   @id @default(uuid())
+  filename   String
+  mimeType   String
+  size       Int
+  path       String // MinIO object storage path
+  type       String // 'image' | 'document' | 'logo' | 'video'
+  altText    String?  @db.Text
+  uploadedBy String
+  uploadedAt DateTime @default(now())
+}
+
+// 7. Audit log / history of updates
+model ContentUpdateHistory {
+  id         String   @id @default(uuid())
+  entityType String // e.g., 'home_page_content', 'platform_setting'
+  entityId   String
+  field      String
+  oldValue   String?  @db.Text
+  newValue   String?  @db.Text
+  updatedBy  String
+  updatedAt  DateTime @default(now())
+}
+
+// 8. Auth / Users
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN")
+  firstName    String?
+  lastName     String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// 9. Service families (Famille 1 → 5 du catalogue)
+model ServiceFamily {
+  id          String    @id @default(uuid())
+  code        String    @unique // 'F1' .. 'F5'
+  name        String
+  description String    @db.Text
+  orderIndex  Int
+  services    Service[]
+  updatedBy   String
+  updatedAt   DateTime  @updatedAt
+}
+
+// === Phase 2 — Contenus éditoriaux gérés par le CMS ===
+
+// 11. Actualités & communiqués
+model NewsArticle {
+  id        String   @id @default(uuid())
+  cat       String // 'communique' | 'evenement' | 'decret' | 'appel'
+  catLabel  String
+  date      String // libellé affiché, ex. '21 mai 2026'
+  dateShort String // ex. '21 MAI'
+  title     String   @db.Text
+  excerpt   String   @db.Text
+  body      String   @db.Text // corps de l'article (paragraphes séparés par \n\n)
+  author    String
+  readTime  String
+  image     String? // chemin/URL média éventuel
+  published Boolean  @default(true)
+  orderIndex Int     @default(0)
+  updatedBy String
+  updatedAt DateTime @updatedAt
+}
+
+// 12. Documentation officielle
+model OfficialDocument {
+  id         String   @id @default(uuid())
+  type       String // 'decret' | 'loi' | 'arrete' | 'circulaire' | 'rapport'
+  typeLabel  String
+  ref        String
+  date       String
+  title      String   @db.Text
+  summary    String   @db.Text
+  pages      Int
+  size       String
+  fileUrl    String? // URL du PDF (MinIO) éventuel
+  published  Boolean  @default(true)
+  orderIndex Int      @default(0)
+  updatedBy  String
+  updatedAt  DateTime @updatedAt
+}
+
+// 13. Projets & programmes
+model Project {
+  id          String   @id @default(uuid())
+  status      String // 'ongoing' | 'completed' | 'planned'
+  statusLabel String
+  title       String
+  period      String
+  budget      String
+  partner     String
+  progress    Int      @default(0)
+  desc        String   @db.Text
+  published   Boolean  @default(true)
+  orderIndex  Int      @default(0)
+  updatedBy   String
+  updatedAt   DateTime @updatedAt
+}
+
+// 14. Organismes sous tutelle & partenaires
+model Organism {
+  id         String   @id @default(uuid())
+  kind       String // 'organism' | 'partner'
+  name       String   @db.Text
+  short      String
+  url        String
+  color      String
+  mark       String
+  published  Boolean  @default(true)
+  orderIndex Int      @default(0)
+  updatedBy  String
+  updatedAt  DateTime @updatedAt
+}
+
+// 15. Bande Flash Infos
+model FlashInfo {
+  id         String   @id @default(uuid())
+  severity   String // 'info' | 'warning' | 'danger' | 'success'
+  label      String
+  text       String   @db.Text
+  active     Boolean  @default(true)
+  orderIndex Int      @default(0)
+  updatedBy  String
+  updatedAt  DateTime @updatedAt
+}
+
+// 16. Démarches en accès rapide (page d'accueil)
+model QuickAction {
+  id         String   @id @default(uuid())
+  ic         String // clé d'icône: 'doc' | 'form' | 'track' | 'pay' | 'appoint'
+  title      String
+  desc       String   @db.Text
+  link       String   @default("/services")
+  published  Boolean  @default(true)
+  orderIndex Int      @default(0)
+  updatedBy  String
+  updatedAt  DateTime @updatedAt
+}
+
+// 10. Catalogue détaillé des services (18 fiches — S01 → S18)
+model Service {
+  id            String        @id @default(uuid())
+  code          String        @unique // 'S01' .. 'S18'
+  title         String
+  tagline       String        @db.Text
+  familyId      String
+  family        ServiceFamily @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  beneficiaries String        @db.Text
+  channels      String        @db.Text
+  targetDelay   String        @db.Text
+  phase         String
+  description   String        @db.Text
+  processSteps  Json // string[] — parcours utilisateur
+  screens       Json // { name, description }[] — écrans et interfaces
+  dataFields    Json // { name, type, source }[] — données métier
+  integrations  Json // { name, description }[] — intégrations et systèmes connexes
+  kpis          Json // string[] — indicateurs de performance
+  businessRules Json // string[] — règles métier et contrôles
+  orderIndex    Int
+  published     Boolean       @default(true)
+  updatedBy     String
+  updatedAt     DateTime      @updatedAt
+}

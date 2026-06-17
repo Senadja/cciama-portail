@@ -1,0 +1,938 @@
+{
+  "families": [
+    {
+      "code": "F1",
+      "name": "Formalités d'entreprise",
+      "description": "Cette famille regroupe les actes fondamentaux qui marquent la vie réglementaire de l'entreprise tchadienne, depuis sa création jusqu'à sa radiation. Elle est au cœur de la mission consulaire et représente le plus gros volume de transactions du programme.",
+      "orderIndex": 1
+    },
+    {
+      "code": "F2",
+      "name": "Commerce extérieur",
+      "description": "Cette famille couvre les services liés aux opérations d'import-export. Elle est stratégique dans le contexte de la ZLECAf et de l'ouverture économique du Tchad.",
+      "orderIndex": 2
+    },
+    {
+      "code": "F3",
+      "name": "Services aux membres",
+      "description": "Cette famille couvre les services transverses offerts à chaque entreprise ressortissante : espace personnel, gestion des cotisations, prise de rendez-vous.",
+      "orderIndex": 3
+    },
+    {
+      "code": "F4",
+      "name": "Formation et accompagnement",
+      "description": "Cette famille structure l'offre de montée en compétences et de conseil personnalisé proposée aux entrepreneurs tchadiens. Elle constitue un levier majeur de développement du secteur privé.",
+      "orderIndex": 4
+    },
+    {
+      "code": "F5",
+      "name": "SI interne et gestion",
+      "description": "Cette famille regroupe les briques transverses indispensables au bon fonctionnement de l'institution : moteur de workflow, gestion électronique des documents, intelligence décisionnelle, comptabilité et ressources humaines.",
+      "orderIndex": 5
+    }
+  ],
+  "services": [
+    {
+      "code": "S01",
+      "title": "Immatriculation en ligne au Registre du Commerce",
+      "tagline": "Créer son entreprise en moins de 48 heures, sans déplacement à N'Djamena",
+      "familyCode": "F1",
+      "beneficiaries": "Entrepreneurs individuels, fondateurs de sociétés (SARL, SA, SAS), professions libérales",
+      "channels": "Portail web e-CCIAMA, application mobile, guichets des délégations régionales",
+      "targetDelay": "48 heures (au lieu de 7 à 15 jours actuellement)",
+      "phase": "Phase 1 — déploiement en M6",
+      "description": "Service permettant à tout entrepreneur de constituer son dossier d'immatriculation en ligne, de joindre les pièces justificatives numérisées, de signer électroniquement, de payer les frais via mobile money ou virement, puis de récupérer en ligne son extrait du RCCM avec QR-code de vérification. Une instruction interne automatisée s'enclenche en parallèle avec contrôle des pièces et validation par un agent CCIAMA.",
+      "processSteps": [
+        "L'usager crée un compte sécurisé (numéro de téléphone + e-mail + OTP).",
+        "Il choisit le type d'entité (entreprise individuelle, SARL, SA, etc.) et remplit un formulaire dynamique adapté.",
+        "Il téléverse les pièces requises (CNI, statuts, justificatif de domicile, etc.) : le système vérifie format et lisibilité.",
+        "Le système calcule automatiquement les droits dus et propose le paiement (Airtel Money, Moov Money, virement, carte).",
+        "L'usager signe électroniquement la déclaration sur l'honneur (signature OTP avancée).",
+        "Le dossier est routé à l'agent instructeur compétent qui valide ou demande des compléments via la plateforme.",
+        "Après validation, le RCCM numérique signé est généré, horodaté et notifié à l'usager (SMS + e-mail).",
+        "L'usager télécharge l'extrait avec QR-code de vérification publique."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Création de compte", "description": "Formulaire d'inscription avec validation OTP par SMS et e-mail." },
+        { "name": "Écran 2 — Choix du type d'entité", "description": "Cartes visuelles décrivant les formes juridiques avec aide contextuelle." },
+        { "name": "Écran 3 — Formulaire dynamique", "description": "Champs adaptatifs selon la forme choisie, sauvegarde automatique." },
+        { "name": "Écran 4 — Téléversement des pièces", "description": "Glisser-déposer, contrôle de format, prévisualisation, OCR sur la CNI." },
+        { "name": "Écran 5 — Récapitulatif et paiement", "description": "Détail des droits, choix du moyen de paiement, redirection sécurisée." },
+        { "name": "Écran 6 — Signature électronique", "description": "Code OTP envoyé au mobile, acceptation des conditions, horodatage." },
+        { "name": "Écran 7 — Suivi du dossier", "description": "Statut en temps réel, historique des échanges, demandes de compléments." },
+        { "name": "Écran 8 — Téléchargement du RCCM", "description": "PDF signé électroniquement, QR-code de vérification publique." }
+      ],
+      "dataFields": [
+        { "name": "Identifiant Unique d'Entreprise (IUE)", "type": "Alphanum.", "source": "Générée par la CCIAMA, format normalisé" },
+        { "name": "Raison sociale", "type": "Texte (255)", "source": "Saisie utilisateur, vérification unicité" },
+        { "name": "Forme juridique", "type": "Énumération", "source": "Liste OHADA" },
+        { "name": "Capital social", "type": "Décimal", "source": "Saisie, contrôle minimums OHADA" },
+        { "name": "Adresse du siège", "type": "Adresse géolocalisée", "source": "API cartographique + saisie" },
+        { "name": "Code NAF / activité principale", "type": "Code", "source": "Nomenclature CEMAC harmonisée" },
+        { "name": "Dirigeants et associés", "type": "Liste de personnes", "source": "Saisie + croisement registres" },
+        { "name": "Pièces justificatives", "type": "Fichiers PDF/JPG", "source": "Téléversement utilisateur" },
+        { "name": "Statut du dossier", "type": "Workflow", "source": "Système (états : déposé, en cours, validé, rejeté)" }
+      ],
+      "integrations": [
+        { "name": "ANIE", "description": "Vérification des projets d'investissement et statuts d'investisseur agréé" },
+        { "name": "DGI", "description": "Génération automatique du numéro d'identification fiscale (NIF)" },
+        { "name": "CNPS", "description": "Pré-inscription de l'employeur dans le système de sécurité sociale" },
+        { "name": "Opérateurs mobile money", "description": "Encaissement des droits d'immatriculation" },
+        { "name": "Service de signature électronique national", "description": "Signature qualifiée des documents" }
+      ],
+      "kpis": [
+        "Délai moyen de délivrance du RCCM (cible : 48 h)",
+        "Taux de dossiers traités sans demande de complément (cible : 75 %)",
+        "Taux de paiement réussi du premier coup (cible : 95 %)",
+        "Nombre d'immatriculations par mois (cible : 1 200 à 24 mois)",
+        "Taux de satisfaction usagers (cible : ≥ 85 %)"
+      ],
+      "businessRules": [
+        "Capital minimum contrôlé selon la forme juridique (OHADA).",
+        "Vérification de l'unicité de la raison sociale dans le registre national.",
+        "Refus automatique en cas de dirigeant interdit de gestion (croisement avec liste judiciaire).",
+        "Délai maximum de 5 jours ouvrés pour fournir les compléments demandés sous peine de rejet."
+      ]
+    },
+    {
+      "code": "S02",
+      "title": "Modifications statutaires et radiations en ligne",
+      "tagline": "Mettre à jour ou clôturer son entreprise depuis chez soi",
+      "familyCode": "F1",
+      "beneficiaries": "Entreprises immatriculées, mandataires sociaux, liquidateurs",
+      "channels": "Portail web, application mobile, délégations régionales",
+      "targetDelay": "72 heures pour les modifications, 7 jours ouvrés pour les radiations",
+      "phase": "Phase 2 — M8",
+      "description": "Service couvrant l'ensemble des actes de vie de l'entreprise après sa création : changement d'adresse, modification de capital, changement de dirigeants, transformation, cession de parts, dissolution et radiation. L'usager y accède via son espace personnel, où l'historique complet de son entreprise est consultable.",
+      "processSteps": [
+        "L'usager se connecte à son espace entreprise (authentification forte).",
+        "Il sélectionne le type d'opération souhaitée dans un catalogue visuel.",
+        "Il remplit le formulaire pré-rempli avec les données existantes de l'entreprise.",
+        "Il téléverse les actes justificatifs (PV d'assemblée, statuts modifiés, etc.).",
+        "Le système calcule les droits et déclenche le paiement.",
+        "Signature électronique du représentant légal.",
+        "Instruction par un agent, publication d'un avis modificatif si nécessaire, mise à jour du RCCM.",
+        "Délivrance de l'extrait modifié avec horodatage de la modification."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Tableau de bord entreprise", "description": "Vue 360° de l'entreprise (statut, dirigeants, historique des actes)." },
+        { "name": "Écran 2 — Catalogue des opérations", "description": "Cartes par type d'acte avec aide et coûts." },
+        { "name": "Écran 3 — Formulaire pré-rempli", "description": "Données actuelles affichées, champs modifiables avec validation." },
+        { "name": "Écran 4 — Téléversement des actes", "description": "Modèles de PV téléchargeables, contrôle de conformité." },
+        { "name": "Écran 5 — Confirmation et publication", "description": "Aperçu de l'avis modificatif, validation, paiement." }
+      ],
+      "dataFields": [
+        { "name": "Référence de l'acte modificatif", "type": "Alphanum.", "source": "Générée séquentielle" },
+        { "name": "Type d'opération", "type": "Énumération", "source": "Liste paramétrable" },
+        { "name": "Date d'effet", "type": "Date", "source": "Saisie utilisateur" },
+        { "name": "Données modifiées", "type": "JSON différentiel", "source": "Calculé automatiquement" },
+        { "name": "Liquidateur (si radiation)", "type": "Personne", "source": "Saisie + vérification" },
+        { "name": "Motif de radiation", "type": "Énumération", "source": "Liste paramétrable" }
+      ],
+      "integrations": [
+        { "name": "DGI", "description": "Mise à jour de la situation fiscale (continuation, cessation)" },
+        { "name": "Journal officiel", "description": "Publication des avis modificatifs et de radiation" },
+        { "name": "CNPS", "description": "Notification des changements affectant l'employeur" },
+        { "name": "Service de signature électronique", "description": "Authentification des actes" }
+      ],
+      "kpis": [
+        "Délai moyen de traitement des modifications (cible : 72 h)",
+        "Taux de dossiers complets au premier dépôt (cible : 80 %)",
+        "Nombre d'opérations modificatives traitées par mois",
+        "Délai de publication des avis légaux (cible : ≤ 5 jours)"
+      ],
+      "businessRules": [
+        "Seul un dirigeant ou mandataire dûment habilité peut initier une modification.",
+        "Une radiation suppose la production d'un PV de dissolution et d'un rapport du liquidateur.",
+        "Toute cession de parts au-delà de 10 % du capital nécessite une vérification renforcée.",
+        "Conservation des historiques pendant la durée légale (minimum 10 ans)."
+      ]
+    },
+    {
+      "code": "S03",
+      "title": "Délivrance d'attestations et extraits dématérialisés",
+      "tagline": "Obtenir une attestation officielle en quelques minutes",
+      "familyCode": "F1",
+      "beneficiaries": "Entreprises, partenaires bancaires et commerciaux, administrations",
+      "channels": "Portail web, application mobile, USSD pour zones sans Internet",
+      "targetDelay": "Instantané pour les attestations standards, 24 h pour les attestations complexes",
+      "phase": "Phase 1 — M6",
+      "description": "Service de production en libre-service d'attestations consulaires : extrait du RCCM, attestation d'inscription, attestation de non-faillite, attestation de situation, attestation d'activité, attestation d'effectif. Chaque attestation est signée électroniquement et porte un QR-code permettant à un tiers de vérifier son authenticité en ligne.",
+      "processSteps": [
+        "L'usager se connecte à son espace entreprise.",
+        "Il sélectionne le type d'attestation et la destination (bancaire, douanière, marché public, etc.).",
+        "Le système génère un aperçu en temps réel.",
+        "L'usager paie en ligne le tarif applicable.",
+        "L'attestation signée électroniquement est immédiatement disponible au téléchargement.",
+        "Un tiers (banque, douane, etc.) peut vérifier l'authenticité en scannant le QR-code ou en saisissant l'identifiant sur le portail public."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Catalogue des attestations", "description": "Liste filtrable par usage avec aperçu et tarif." },
+        { "name": "Écran 2 — Aperçu personnalisé", "description": "Document généré en temps réel avec les données à jour." },
+        { "name": "Écran 3 — Paiement et téléchargement", "description": "Paiement, génération du PDF signé, archivage dans l'espace usager." },
+        { "name": "Écran 4 (public) — Vérification par QR-code", "description": "Page publique accessible à toute personne souhaitant authentifier un document." }
+      ],
+      "dataFields": [
+        { "name": "Numéro d'attestation", "type": "UUID", "source": "Générée unique" },
+        { "name": "Type d'attestation", "type": "Énumération", "source": "Liste paramétrable" },
+        { "name": "Données extraites du RCCM", "type": "Snapshot", "source": "Base entreprises" },
+        { "name": "Hash du document", "type": "SHA-256", "source": "Calculé à la génération" },
+        { "name": "URL de vérification", "type": "URL", "source": "Générée avec token" },
+        { "name": "Date d'expiration", "type": "Date", "source": "Calculée selon le type" }
+      ],
+      "integrations": [
+        { "name": "Service de signature électronique", "description": "Signature qualifiée à la volée" },
+        { "name": "Plateforme de paiement", "description": "Encaissement des frais" },
+        { "name": "Portail public de vérification", "description": "Authentification par les tiers" }
+      ],
+      "kpis": [
+        "Nombre d'attestations délivrées par mois (cible : 8 000)",
+        "Délai moyen de délivrance (cible : < 5 min en libre-service)",
+        "Nombre de vérifications publiques par mois",
+        "Taux d'attestations rejetées en vérification (indicateur de fraude)"
+      ],
+      "businessRules": [
+        "Une attestation a une durée de validité explicite (1 à 3 mois selon le type).",
+        "Les attestations sensibles (non-faillite) nécessitent un contrôle humain a posteriori.",
+        "Toute génération est tracée dans un journal inviolable (logs horodatés)."
+      ]
+    },
+    {
+      "code": "S04",
+      "title": "Annuaire géolocalisé des entreprises tchadiennes",
+      "tagline": "Donner de la visibilité aux entreprises et faciliter les mises en relation",
+      "familyCode": "F1",
+      "beneficiaries": "Toutes les entreprises immatriculées, opérateurs économiques, investisseurs, acheteurs publics",
+      "channels": "Portail public, application mobile, API ouverte pour partenaires",
+      "targetDelay": "Mise à jour en temps réel à partir du RCCM",
+      "phase": "Phase 2 — M10",
+      "description": "Annuaire public et interrogeable de toutes les entreprises tchadiennes, géolocalisées sur une carte, filtrables par secteur d'activité, taille, région, statut (PME, startup, exportateur). Chaque entreprise dispose d'une fiche enrichissable (photos, contacts, produits/services, certifications, références clients) qu'elle peut alimenter depuis son espace.",
+      "processSteps": [
+        "L'utilisateur public accède à l'annuaire sans création de compte.",
+        "Il recherche par mot-clé, secteur, localisation ou filtre avancé.",
+        "Il consulte la fiche d'une entreprise, sa carte, ses coordonnées, ses certifications.",
+        "Il peut contacter directement via un formulaire intégré (la CCIAMA assure l'anti-spam).",
+        "Côté entreprise : enrichissement de la fiche via l'espace adhérent (photos, vidéos, catalogue produits)."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Page d'accueil annuaire", "description": "Barre de recherche, filtres rapides, carte interactive." },
+        { "name": "Écran 2 — Résultats", "description": "Liste paginée + carte, tri par pertinence, distance ou alphabétique." },
+        { "name": "Écran 3 — Fiche entreprise publique", "description": "Identité, contacts, produits/services, certifications, carte." },
+        { "name": "Écran 4 — Espace administration de la fiche", "description": "Édition des contenus enrichis par le dirigeant de l'entreprise." }
+      ],
+      "dataFields": [
+        { "name": "Données socle RCCM", "type": "Référentiel", "source": "Synchronisation temps réel" },
+        { "name": "Coordonnées de contact", "type": "Texte", "source": "Saisie entreprise" },
+        { "name": "Coordonnées GPS", "type": "Latitude/Longitude", "source": "Géocodage + validation" },
+        { "name": "Logo et photos", "type": "Images", "source": "Téléversement entreprise (modération)" },
+        { "name": "Catalogue produits/services", "type": "Liste structurée", "source": "Saisie entreprise" },
+        { "name": "Certifications", "type": "Liste", "source": "Saisie + justificatifs" },
+        { "name": "Mots-clés", "type": "Tags", "source": "Saisie + suggestion automatique" }
+      ],
+      "integrations": [
+        { "name": "API cartographique", "description": "Géolocalisation et affichage cartographique" },
+        { "name": "Service de modération", "description": "Contrôle des contenus enrichis" },
+        { "name": "API publique CCIAMA", "description": "Mise à disposition partenaires (acheteurs, investisseurs)" }
+      ],
+      "kpis": [
+        "Nombre d'entreprises géolocalisées (cible : 60 000)",
+        "Nombre de fiches enrichies activement (cible : 15 000)",
+        "Nombre de visites mensuelles de l'annuaire (cible : 50 000)",
+        "Taux de contact aboutis (cible : 12 %)"
+      ],
+      "businessRules": [
+        "Toute fiche est par défaut publique pour la partie réglementaire (RCCM).",
+        "Les contenus enrichis sont soumis à modération a priori pour les premières publications.",
+        "Les entreprises radiées sont retirées de la recherche mais conservent une fiche historique."
+      ]
+    },
+    {
+      "code": "S05",
+      "title": "Certificats d'origine numériques",
+      "tagline": "Édition instantanée et vérification mondiale en un scan",
+      "familyCode": "F2",
+      "beneficiaries": "Exportateurs tchadiens, importateurs étrangers, services douaniers étrangers",
+      "channels": "Portail web, application mobile, postes décentralisés dans les délégations",
+      "targetDelay": "Délivrance en moins de 4 heures (au lieu de 2 à 5 jours actuellement)",
+      "phase": "Phase 2 — M9 (priorité ZLECAf)",
+      "description": "Service phare du programme : émission de certificats d'origine numériques signés électroniquement, conformes aux standards ZLECAf et CEMAC. Chaque certificat porte un QR-code et un identifiant unique vérifiable par toute douane étrangère via le portail public ou par API. Réduit drastiquement la fraude et accélère le dédouanement à destination.",
+      "processSteps": [
+        "L'exportateur se connecte et lance une nouvelle demande de certificat.",
+        "Il sélectionne le pays de destination et le type de certificat (CO standard, EUR.1, ZLECAf, etc.).",
+        "Il saisit ou importe les données de la facture commerciale (produits, codes SH, valeurs, poids).",
+        "Le système calcule automatiquement l'éligibilité aux préférences tarifaires.",
+        "Il joint la facture, la liste de colisage, et tout document de support (déclarations du fournisseur, etc.).",
+        "Paiement en ligne des droits.",
+        "Instruction par un agent du service Commerce extérieur (workflow rapide).",
+        "Signature électronique et émission du certificat numérique avec QR-code.",
+        "Le certificat est transmis par e-mail à l'exportateur et accessible à la douane de destination via portail / API."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Nouvelle demande", "description": "Choix du pays de destination, du type de certificat, et de l'opération." },
+        { "name": "Écran 2 — Saisie des marchandises", "description": "Tableau ligne par ligne avec autocomplétion des codes SH (système harmonisé)." },
+        { "name": "Écran 3 — Vérification d'éligibilité", "description": "Le système indique automatiquement les régimes préférentiels applicables." },
+        { "name": "Écran 4 — Téléversement des justificatifs", "description": "Facture, liste de colisage, déclarations fournisseurs, B/L." },
+        { "name": "Écran 5 — Aperçu du certificat", "description": "Document généré avant validation, modifiable une dernière fois." },
+        { "name": "Écran 6 — Suivi et historique", "description": "Statut, échanges, certificats antérieurs, possibilité de duplicata." },
+        { "name": "Écran 7 (public) — Vérification douane", "description": "Page accessible aux douanes étrangères : scan QR ou saisie du n° et de la clé." }
+      ],
+      "dataFields": [
+        { "name": "N° de certificat", "type": "Alphanum.", "source": "Séquentiel sécurisé" },
+        { "name": "Type de certificat", "type": "Énumération", "source": "ZLECAf, EUR.1, CEMAC, standard" },
+        { "name": "Pays de destination", "type": "Code ISO", "source": "Liste ISO 3166" },
+        { "name": "Exportateur", "type": "Référence entreprise", "source": "RCCM CCIAMA" },
+        { "name": "Importateur", "type": "Texte structuré", "source": "Saisie" },
+        { "name": "Marchandises (lignes)", "type": "Tableau", "source": "Saisie + codes SH" },
+        { "name": "Valeur FOB / poids", "type": "Décimal", "source": "Saisie + contrôle de cohérence" },
+        { "name": "Régime préférentiel", "type": "Énumération", "source": "Calculé automatiquement" },
+        { "name": "QR-code & hash", "type": "Données techniques", "source": "Générés à la signature" }
+      ],
+      "integrations": [
+        { "name": "Douanes tchadiennes", "description": "Échange d'informations en temps réel" },
+        { "name": "API ZLECAf (à venir)", "description": "Vérification croisée des certificats panafricains" },
+        { "name": "Plateforme de paiement", "description": "Encaissement des droits" },
+        { "name": "Service de signature électronique", "description": "Signature qualifiée du certificat" },
+        { "name": "API publique pour douanes étrangères", "description": "Authentification du certificat à destination" }
+      ],
+      "kpis": [
+        "Délai moyen de délivrance (cible : ≤ 4 heures, < 24 h sur 95 % des cas)",
+        "Nombre de certificats émis par mois (cible : 3 500)",
+        "Taux de rejet en vérification à destination (cible : < 0,5 %)",
+        "Volume de scans QR par les douanes étrangères (indicateur de confiance)",
+        "Délai moyen de dédouanement à destination (gain estimé : −30 %)"
+      ],
+      "businessRules": [
+        "Seul un exportateur inscrit et à jour de ses obligations peut émettre un certificat.",
+        "Tout certificat émis est verrouillé : aucune modification, seulement annulation et réémission.",
+        "Une vérification renforcée s'applique au-delà d'un certain seuil de valeur ou pour les pays sensibles.",
+        "Les justificatifs sont archivés sur 10 ans minimum."
+      ]
+    },
+    {
+      "code": "S06",
+      "title": "Carnets ATA numériques",
+      "tagline": "Faciliter l'admission temporaire de marchandises à l'international",
+      "familyCode": "F2",
+      "beneficiaries": "Entreprises participant à des salons, expositions, missions commerciales, échantillonnages",
+      "channels": "Portail web, accompagnement en délégation pour les premiers carnets",
+      "targetDelay": "3 jours ouvrés (au lieu de 2 à 3 semaines)",
+      "phase": "Phase 2 — M11",
+      "description": "Émission dématérialisée des carnets ATA (Admission Temporaire / Temporary Admission) permettant à une entreprise tchadienne d'exposer ou de faire transiter ses marchandises dans un pays étranger sans paiement de droits de douane. Le carnet ATA est un document international standardisé délivré sous la garantie de la chambre de commerce. La version numérique inclut un suivi des passages aux frontières.",
+      "processSteps": [
+        "L'entreprise saisit la liste des marchandises (description, valeur, poids, n° de série).",
+        "Elle indique les pays prévus et la durée de séjour.",
+        "Elle dépose les garanties exigées (caution bancaire ou dépôt).",
+        "Validation par la CCIAMA, calcul des droits éventuels.",
+        "Génération du carnet numérique signé et émission de la version papier de secours pour les pays n'acceptant pas encore le format numérique.",
+        "Suivi des passages frontaliers : chaque entrée/sortie est saisie via une application dédiée.",
+        "Apurement final du carnet et restitution de la garantie."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Création du carnet", "description": "Formulaire ATA, type d'opération (foire, professionnel, échantillon)." },
+        { "name": "Écran 2 — Saisie des marchandises", "description": "Tableau enrichi : description, valeur, poids, n° de série." },
+        { "name": "Écran 3 — Garanties", "description": "Choix de la caution bancaire ou dépôt en espèces, justificatifs." },
+        { "name": "Écran 4 — Suivi des passages", "description": "Carte mondiale avec les voyages, statut de chaque feuillet." },
+        { "name": "Écran 5 — Apurement", "description": "Validation finale, restitution de garantie, archivage." }
+      ],
+      "dataFields": [
+        { "name": "N° de carnet ATA", "type": "Alphanum.", "source": "Séquentiel international" },
+        { "name": "Marchandises", "type": "Liste détaillée", "source": "Saisie utilisateur" },
+        { "name": "Pays de destination", "type": "Liste pays ISO", "source": "Sélection" },
+        { "name": "Garantie", "type": "Type + montant", "source": "Saisie + justificatif" },
+        { "name": "Feuillets utilisés", "type": "Historique passages", "source": "Saisies frontière" },
+        { "name": "Date d'expiration", "type": "Date", "source": "Calculée (1 an maximum)" }
+      ],
+      "integrations": [
+        { "name": "Réseau international ATA (ICC)", "description": "Validation croisée avec les chambres consulaires étrangères" },
+        { "name": "Douanes tchadiennes", "description": "Validation des sorties et retours" },
+        { "name": "Banques partenaires", "description": "Cautions bancaires électroniques" }
+      ],
+      "kpis": [
+        "Nombre de carnets ATA émis par an (cible : 250 d'ici 24 mois)",
+        "Délai moyen de délivrance (cible : 3 jours)",
+        "Taux d'apurement régulier (cible : 98 %)",
+        "Délai moyen de restitution de garantie (cible : 15 jours après retour)"
+      ],
+      "businessRules": [
+        "La garantie doit couvrir au moins 110 % de la valeur des marchandises.",
+        "Un carnet ATA a une validité de 1 an non renouvelable.",
+        "L'absence d'apurement dans les délais entraîne la mise en jeu de la garantie."
+      ]
+    },
+    {
+      "code": "S07",
+      "title": "Visa de factures et légalisations",
+      "tagline": "Authentifier ses documents commerciaux pour l'international",
+      "familyCode": "F2",
+      "beneficiaries": "Exportateurs, prestataires de services à l'international, soumissionnaires à des appels d'offres étrangers",
+      "channels": "Portail web, application mobile",
+      "targetDelay": "24 heures",
+      "phase": "Phase 2 — M10",
+      "description": "Service d'authentification numérique de factures commerciales, documents de soumission, attestations diverses destinées à des partenaires ou autorités étrangères. Le document est revêtu d'un cachet électronique de la CCIAMA et porte un QR-code de vérification.",
+      "processSteps": [
+        "L'usager téléverse le document à viser (PDF de préférence).",
+        "Il indique le motif (factures, soumissions, attestations).",
+        "Paiement des droits selon le type et le nombre de pages.",
+        "Instruction par un agent (contrôle de cohérence avec l'activité déclarée).",
+        "Apposition du cachet numérique CCIAMA et de la signature.",
+        "Téléchargement immédiat du document visé."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Nouvelle demande", "description": "Téléversement du document + sélection du motif." },
+        { "name": "Écran 2 — Aperçu et paiement", "description": "Document visualisé, calcul des droits, paiement." },
+        { "name": "Écran 3 — Téléchargement", "description": "Document visé téléchargeable, archive personnelle." }
+      ],
+      "dataFields": [
+        { "name": "Type de document", "type": "Énumération", "source": "Liste paramétrable" },
+        { "name": "Document original", "type": "Fichier PDF", "source": "Téléversement" },
+        { "name": "Document visé", "type": "Fichier PDF signé", "source": "Généré par le système" },
+        { "name": "Motif", "type": "Texte", "source": "Saisie" }
+      ],
+      "integrations": [
+        { "name": "Service de signature électronique", "description": "Cachet numérique de l'institution" },
+        { "name": "Plateforme de paiement", "description": "Encaissement" }
+      ],
+      "kpis": [
+        "Nombre de visas délivrés par mois (cible : 2 500)",
+        "Délai moyen (cible : 24 h, 80 % en moins de 12 h)",
+        "Volume de pages traitées",
+        "Taux de rejet (manque de cohérence)"
+      ],
+      "businessRules": [
+        "Le visa atteste de la signature et de la qualité du signataire, pas du contenu commercial.",
+        "Les documents incohérents avec l'activité déclarée font l'objet d'une demande de complément."
+      ]
+    },
+    {
+      "code": "S08",
+      "title": "Espace adhérent et compte unifié entreprise",
+      "tagline": "Un compte, tous les services",
+      "familyCode": "F3",
+      "beneficiaries": "Toutes les entreprises immatriculées",
+      "channels": "Portail web, application mobile",
+      "targetDelay": "Activation instantanée",
+      "phase": "Phase 1 — M5",
+      "description": "Espace personnel sécurisé donnant accès à l'ensemble des services CCIAMA : visualisation du registre, historique des actes, suivi des dossiers en cours, espace documentaire, gestion des cotisations, accès aux services partenaires. Un seul compte permet plusieurs utilisateurs avec des rôles distincts (dirigeant, comptable, RH, commercial).",
+      "processSteps": [
+        "Activation à la première connexion via l'identifiant unique d'entreprise et un code envoyé au dirigeant.",
+        "Le dirigeant définit les utilisateurs secondaires et leurs droits.",
+        "Chaque utilisateur dispose d'un tableau de bord adapté à son rôle.",
+        "Notifications par e-mail et SMS pour les actes importants.",
+        "Audit log accessible au dirigeant pour suivre toutes les actions de l'équipe."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Activation", "description": "Saisie de l'IUE + OTP dirigeant + définition du mot de passe." },
+        { "name": "Écran 2 — Tableau de bord", "description": "Statut entreprise, dossiers en cours, factures, notifications." },
+        { "name": "Écran 3 — Gestion des utilisateurs", "description": "Liste des collaborateurs, attribution des rôles." },
+        { "name": "Écran 4 — Documents", "description": "Bibliothèque des actes, attestations, certificats émis." },
+        { "name": "Écran 5 — Paramètres", "description": "Préférences de notification, langues, méthodes de paiement enregistrées." },
+        { "name": "Écran 6 — Audit log", "description": "Journal des actions par utilisateur." }
+      ],
+      "dataFields": [
+        { "name": "Compte utilisateur", "type": "Identifiants chiffrés", "source": "Création + bcrypt" },
+        { "name": "Rôles et permissions", "type": "Matrice", "source": "Définie par dirigeant" },
+        { "name": "Préférences", "type": "Configuration", "source": "Saisies utilisateur" },
+        { "name": "Notifications", "type": "File d'événements", "source": "Système" },
+        { "name": "Sessions actives", "type": "Tokens", "source": "Système d'authentification" }
+      ],
+      "integrations": [
+        { "name": "Service d'authentification (SSO)", "description": "Authentification unique pour tous les services" },
+        { "name": "Service de notification (SMS, e-mail, push)", "description": "Alertes en temps réel" },
+        { "name": "Annuaire interne", "description": "Synchronisation des informations entreprise" }
+      ],
+      "kpis": [
+        "Nombre de comptes actifs (cible : 40 000 à 24 mois)",
+        "Taux d'utilisateurs revenant chaque mois (cible : 60 %)",
+        "Durée moyenne de session (indicateur d'engagement)",
+        "Taux d'activation de la double authentification (cible : 70 %)"
+      ],
+      "businessRules": [
+        "Le dirigeant déclaré au RCCM est l'administrateur du compte par défaut.",
+        "La double authentification (2FA) est obligatoire pour les actions sensibles (signature, paiement).",
+        "Toute action est journalisée et conservée 10 ans."
+      ]
+    },
+    {
+      "code": "S09",
+      "title": "Gestion des cotisations consulaires",
+      "tagline": "Payer ses cotisations en ligne, sans déplacement",
+      "familyCode": "F3",
+      "beneficiaries": "Toutes les entreprises ressortissantes",
+      "channels": "Portail web, application mobile, mobile money, virement",
+      "targetDelay": "Encaissement instantané",
+      "phase": "Phase 2 — M9",
+      "description": "Service de calcul et de paiement en ligne des cotisations consulaires annuelles. Le système calcule automatiquement le montant dû selon la taille de l'entreprise et son secteur, envoie des rappels personnalisés, et délivre une attestation de paiement immédiate.",
+      "processSteps": [
+        "Calcul automatique de la cotisation annuelle (chiffre d'affaires déclaré, secteur, effectif).",
+        "Notification à l'entreprise dans son espace + e-mail + SMS.",
+        "L'entreprise consulte le détail du calcul et peut le contester.",
+        "Paiement en une fois ou en plusieurs échéances (mobile money, virement, carte).",
+        "Délivrance immédiate de l'attestation de paiement.",
+        "Rappels automatiques en cas d'impayé, escalade prévue."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Mes cotisations", "description": "Historique, montants dus, dates d'échéance." },
+        { "name": "Écran 2 — Détail du calcul", "description": "Base de calcul, taux, contestation possible." },
+        { "name": "Écran 3 — Paiement", "description": "Choix du mode, échéancier, exécution." },
+        { "name": "Écran 4 — Attestation", "description": "Génération immédiate, téléchargement, archivage." }
+      ],
+      "dataFields": [
+        { "name": "Cotisation annuelle", "type": "Décimal", "source": "Calcul automatique" },
+        { "name": "Base de calcul", "type": "CA / effectif / secteur", "source": "Données entreprise" },
+        { "name": "Paiements", "type": "Historique", "source": "Plateforme de paiement" },
+        { "name": "Statut", "type": "Énumération", "source": "À jour, en retard, contesté" }
+      ],
+      "integrations": [
+        { "name": "Plateforme de paiement", "description": "Encaissement multi-canal" },
+        { "name": "Comptabilité CCIAMA", "description": "Enregistrement automatique en comptabilité" },
+        { "name": "DGI", "description": "Croisement avec les déclarations fiscales pour la base de calcul" }
+      ],
+      "kpis": [
+        "Taux de recouvrement à échéance (cible : 90 %)",
+        "Délai moyen de paiement après notification (cible : 30 jours)",
+        "Part de paiements dématérialisés (cible : 95 %)",
+        "Recettes de cotisations annuelles"
+      ],
+      "businessRules": [
+        "Le non-paiement à 90 jours entraîne la suspension des services en ligne.",
+        "Une contestation suspend l'exigibilité pendant son instruction.",
+        "Les paiements échelonnés sont possibles pour les TPE et les nouvelles entreprises."
+      ]
+    },
+    {
+      "code": "S10",
+      "title": "Demande de rendez-vous et services présentiels",
+      "tagline": "Préparer sa visite en délégation pour ne pas attendre",
+      "familyCode": "F3",
+      "beneficiaries": "Entreprises et particuliers nécessitant un rendez-vous physique",
+      "channels": "Portail web, application mobile, USSD, centre d'appels",
+      "targetDelay": "Confirmation immédiate du créneau",
+      "phase": "Phase 1 — M6",
+      "description": "Service de prise de rendez-vous en ligne dans les délégations CCIAMA pour les opérations nécessitant une présence physique (légalisation de signatures, dépôt d'originaux, sessions de conseil personnalisé). Réduit drastiquement les files d'attente.",
+      "processSteps": [
+        "L'usager choisit la délégation, l'objet du rendez-vous et un créneau disponible.",
+        "Confirmation immédiate par SMS et e-mail.",
+        "L'usager peut joindre des documents préparatoires.",
+        "Rappel automatique 24 h avant.",
+        "À l'arrivée, l'usager scanne un QR-code et est dirigé vers le guichet compétent.",
+        "Évaluation du service après le rendez-vous."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Choix de la délégation et du motif", "description": "Carte des délégations, catalogue des motifs." },
+        { "name": "Écran 2 — Calendrier des créneaux", "description": "Disponibilités en temps réel, choix d'horaire." },
+        { "name": "Écran 3 — Pièces à apporter", "description": "Liste personnalisée selon le motif, possibilité d'envoi préalable." },
+        { "name": "Écran 4 — Confirmation et préparation", "description": "Récapitulatif, QR-code d'arrivée, ajout au calendrier." }
+      ],
+      "dataFields": [
+        { "name": "Délégation", "type": "Référence", "source": "Annuaire CCIAMA" },
+        { "name": "Motif", "type": "Énumération", "source": "Liste paramétrable" },
+        { "name": "Créneau", "type": "Date + heure", "source": "Calendrier des agents" },
+        { "name": "Pièces préparatoires", "type": "Fichiers", "source": "Téléversement" },
+        { "name": "QR-code de pointage", "type": "Code unique", "source": "Généré par le système" }
+      ],
+      "integrations": [
+        { "name": "Agendas internes des agents", "description": "Synchronisation des disponibilités" },
+        { "name": "Service de notification", "description": "Confirmations et rappels" },
+        { "name": "Gestion de file d'attente physique", "description": "Pointage à l'arrivée" }
+      ],
+      "kpis": [
+        "Nombre de rendez-vous pris par mois",
+        "Taux d'absentéisme (cible : < 10 %)",
+        "Temps d'attente moyen sur place (cible : < 15 min)",
+        "Satisfaction post-rendez-vous (cible : ≥ 80 %)"
+      ],
+      "businessRules": [
+        "Annulation gratuite jusqu'à 24 h avant le rendez-vous.",
+        "Trois absences non justifiées entraînent un blocage temporaire de la prise de rendezvous en ligne."
+      ]
+    },
+    {
+      "code": "S11",
+      "title": "Catalogue de formations et inscriptions en ligne",
+      "tagline": "Monter en compétence sans quitter son entreprise",
+      "familyCode": "F4",
+      "beneficiaries": "Dirigeants, cadres, employés des entreprises tchadiennes",
+      "channels": "Portail web, application mobile",
+      "targetDelay": "Inscription instantanée",
+      "phase": "Phase 2 — M12",
+      "description": "Catalogue interrogeable de toutes les formations proposées par la CCIAMA et ses partenaires (gestion d'entreprise, commerce international, fiscalité, numérique, leadership, etc.). Inscription en ligne, paiement, gestion des prérequis, certificat de participation à la clé.",
+      "processSteps": [
+        "Recherche dans le catalogue par thème, niveau, format (présentiel, distanciel, hybride).",
+        "Consultation de la fiche formation : objectifs, programme, formateurs, prérequis, dates.",
+        "Inscription en ligne, paiement éventuel.",
+        "Réception des supports avant la formation.",
+        "Suivi en présentiel ou à distance via la plateforme e-learning intégrée.",
+        "Évaluation, délivrance d'un certificat de participation signé électroniquement."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Catalogue", "description": "Liste filtrable par thème, niveau, format, durée, prix." },
+        { "name": "Écran 2 — Fiche formation", "description": "Détail complet, formateurs, sessions, témoignages." },
+        { "name": "Écran 3 — Inscription", "description": "Choix de la session, paiement, conditions." },
+        { "name": "Écran 4 — Mes formations", "description": "Suivi des inscriptions, accès aux supports, calendrier." },
+        { "name": "Écran 5 — Évaluation et certificat", "description": "Questionnaire de satisfaction, téléchargement du certificat." }
+      ],
+      "dataFields": [
+        { "name": "Formation", "type": "Fiche structurée", "source": "Catalogue interne" },
+        { "name": "Session", "type": "Dates + lieu + formateur", "source": "Planning interne" },
+        { "name": "Inscription", "type": "Lien participant-session", "source": "Système" },
+        { "name": "Prérequis", "type": "Liste", "source": "Définition pédagogique" },
+        { "name": "Évaluations", "type": "Notes + commentaires", "source": "Participants" },
+        { "name": "Certificat", "type": "PDF signé", "source": "Généré après validation" }
+      ],
+      "integrations": [
+        { "name": "Plateforme e-learning (LMS)", "description": "Diffusion des contenus à distance" },
+        { "name": "Plateforme de paiement", "description": "Encaissement des frais" },
+        { "name": "Espace adhérent", "description": "Suivi unifié de la formation de l'équipe" }
+      ],
+      "kpis": [
+        "Nombre d'inscriptions par mois (cible : 800)",
+        "Taux de complétion des formations (cible : 75 %)",
+        "Note moyenne de satisfaction (cible : 4,2/5)",
+        "Taux de réinscription d'une année sur l'autre (cible : 40 %)"
+      ],
+      "businessRules": [
+        "Les inscriptions sont closes 48 h avant la session.",
+        "Le certificat est délivré si le participant a assisté à au moins 80 % de la formation et obtenu la note minimale à l'évaluation finale."
+      ]
+    },
+    {
+      "code": "S12",
+      "title": "Plateforme e-learning et bibliothèque numérique",
+      "tagline": "Apprendre à son rythme, à distance",
+      "familyCode": "F4",
+      "beneficiaries": "Entrepreneurs en région, cadres des PME, étudiants",
+      "channels": "Portail web (responsive), application mobile, accès hors-ligne possible",
+      "targetDelay": "Accès immédiat aux contenus",
+      "phase": "Phase 3 — M16",
+      "description": "Plateforme e-learning intégrant des parcours certifiants en autonomie (gestion d'entreprise, marketing digital, comptabilité, export, etc.), des webinaires enregistrés, une bibliothèque de ressources (modèles de contrats, guides pratiques, vidéos de témoignages). Une partie des contenus est accessible gratuitement, d'autres en abonnement ou à l'unité.",
+      "processSteps": [
+        "Inscription à un parcours ou achat à l'unité.",
+        "Accès aux modules vidéo, quiz interactifs, devoirs.",
+        "Mode hors-ligne pour les zones à faible connectivité.",
+        "Évaluations intermédiaires et finales.",
+        "Délivrance d'un badge ou certificat numérique."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Mes parcours", "description": "Progression visualisée, prochaine leçon, deadlines." },
+        { "name": "Écran 2 — Lecteur de cours", "description": "Vidéo, transcript, ressources liées, prise de notes." },
+        { "name": "Écran 3 — Quiz et évaluations", "description": "Questions multiples, scoring instantané, explications." },
+        { "name": "Écran 4 — Bibliothèque", "description": "Modèles téléchargeables, guides, fiches pratiques." },
+        { "name": "Écran 5 — Mes certifications", "description": "Badges obtenus, certificats partageables sur LinkedIn." }
+      ],
+      "dataFields": [
+        { "name": "Cours", "type": "Structure hiérarchique", "source": "Conception pédagogique" },
+        { "name": "Progression apprenant", "type": "Pourcentage + traces xAPI", "source": "Activité utilisateur" },
+        { "name": "Évaluations", "type": "Notes + tentatives", "source": "LMS" },
+        { "name": "Certifications", "type": "Badge / certificat numérique", "source": "Système, signé électroniquement" }
+      ],
+      "integrations": [
+        { "name": "LMS (Moodle ou équivalent)", "description": "Gestion des cours et des progressions" },
+        { "name": "CDN", "description": "Diffusion vidéo optimisée selon la bande passante" },
+        { "name": "Open Badges", "description": "Émission de badges interopérables internationalement" }
+      ],
+      "kpis": [
+        "Nombre d'apprenants actifs par mois (cible : 5 000)",
+        "Taux de complétion des parcours certifiants (cible : 60 %)",
+        "Nombre de badges délivrés",
+        "Temps moyen passé sur la plateforme"
+      ],
+      "businessRules": [
+        "Les contenus gratuits sont accessibles sans inscription complète.",
+        "Les certifications signées impliquent une vérification d'identité préalable.",
+        "Les contenus peuvent être téléchargés pour usage hors-ligne mais sont chiffrés."
+      ]
+    },
+    {
+      "code": "S13",
+      "title": "Accompagnement individuel et coaching",
+      "tagline": "Un expert à ses côtés pour chaque étape clé",
+      "familyCode": "F4",
+      "beneficiaries": "Porteurs de projet, dirigeants de PME, exportateurs débutants",
+      "channels": "Visioconférence intégrée, présentiel en délégation",
+      "targetDelay": "Premier rendez-vous sous 7 jours",
+      "phase": "Phase 2 — M14",
+      "description": "Service d'accompagnement personnalisé par des conseillers CCIAMA et un réseau d'experts partenaires : aide au business plan, accompagnement à l'export, conseil juridique de premier niveau, recherche de financement. Les séances peuvent être en présentiel ou en visioconférence intégrée au portail.",
+      "processSteps": [
+        "L'usager remplit un diagnostic en ligne (étape de développement, besoins, secteurs).",
+        "Le système recommande un programme d'accompagnement et un conseiller adapté.",
+        "Prise de rendez-vous (visio ou présentiel).",
+        "Séances avec partage de documents, plan d'action, suivi.",
+        "Bilan final et orientation vers d'autres services."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Diagnostic", "description": "Questionnaire structuré générant un profil." },
+        { "name": "Écran 2 — Programmes recommandés", "description": "Liste personnalisée d'accompagnements." },
+        { "name": "Écran 3 — Salle de visio", "description": "Visioconférence intégrée, tableau blanc, partage d'écran, enregistrement." },
+        { "name": "Écran 4 — Plan d'action", "description": "Actions à mener entre les séances, échéances, ressources." }
+      ],
+      "dataFields": [
+        { "name": "Profil entrepreneur", "type": "Diagnostic structuré", "source": "Réponses au questionnaire" },
+        { "name": "Programme", "type": "Lien diagnostic-programme", "source": "Recommandation système" },
+        { "name": "Séances", "type": "Historique + notes", "source": "Conseiller" },
+        { "name": "Plan d'action", "type": "Liste de tâches", "source": "Élaboré en séance" }
+      ],
+      "integrations": [
+        { "name": "Visioconférence (Jitsi ou Teams)", "description": "Sessions à distance sécurisées" },
+        { "name": "Annuaire des experts partenaires", "description": "Mise en relation thématique" },
+        { "name": "Outil de prise de notes collaboratif", "description": "Travail en séance" }
+      ],
+      "kpis": [
+        "Nombre d'entreprises accompagnées par an (cible : 1 200)",
+        "Nombre moyen de séances par accompagnement",
+        "Taux de transformation en projet concret (cible : 50 %)",
+        "Satisfaction des bénéficiaires (cible : ≥ 85 %)"
+      ],
+      "businessRules": [
+        "Le premier rendez-vous est gratuit pour toute entreprise à jour de ses cotisations.",
+        "Au-delà, un tarif réduit s'applique selon la taille de l'entreprise.",
+        "Confidentialité absolue garantie par charte signée par les conseillers."
+      ]
+    },
+    {
+      "code": "S14",
+      "title": "Workflow interne d'instruction des dossiers",
+      "tagline": "Le moteur invisible qui fait tourner tous les services",
+      "familyCode": "F5",
+      "beneficiaries": "Agents instructeurs CCIAMA, chefs de service, direction",
+      "channels": "Application interne (web), application mobile pour les déplacements",
+      "targetDelay": "Traitement temps réel des affectations",
+      "phase": "Phase 1 — M6 (priorité)",
+      "description": "Brique transverse à tous les services usagers : le moteur de workflow oriente chaque dossier (immatriculation, certificat, attestation, etc.) vers l'agent compétent, suit son avancement, déclenche des escalades en cas de retard, et fournit aux managers une vision en temps réel de la charge et des performances.",
+      "processSteps": [
+        "Tout dossier déposé par un usager génère un ticket de workflow.",
+        "Le système l'affecte selon des règles paramétrables (type, région, charge, compétence).",
+        "L'agent reçoit une notification et accède au dossier dans sa file.",
+        "Il peut valider, demander un complément, rejeter, ou réaffecter.",
+        "Le chef de service voit la charge globale et peut rééquilibrer.",
+        "Les délais sont contrôlés en continu : alerte à T-1 jour, escalade automatique au-delà.",
+        "Toutes les actions sont journalisées pour audit."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Ma file de travail", "description": "Liste priorisée des dossiers à traiter aujourd'hui." },
+        { "name": "Écran 2 — Vue dossier", "description": "Toutes les pièces, l'historique, les actions possibles." },
+        { "name": "Écran 3 — Demande de complément", "description": "Formulaire structuré, envoi automatique à l'usager." },
+        { "name": "Écran 4 — Tableau de bord manager", "description": "Charge par agent, délais, alertes, KPI temps réel." },
+        { "name": "Écran 5 — Paramétrage des règles", "description": "Configuration des règles d'affectation et d'escalade." }
+      ],
+      "dataFields": [
+        { "name": "Ticket de workflow", "type": "Objet structuré", "source": "Généré à la création" },
+        { "name": "État du ticket", "type": "Énumération", "source": "déposé, affecté, en cours, complément, validé, rejeté" },
+        { "name": "Agent affecté", "type": "Référence", "source": "Règles d'affectation" },
+        { "name": "Délais", "type": "Dates", "source": "Calculées selon SLA" },
+        { "name": "Historique des actions", "type": "Liste horodatée", "source": "Journal système" }
+      ],
+      "integrations": [
+        { "name": "Tous les services usagers", "description": "Génération de tickets" },
+        { "name": "Service de notification interne", "description": "Alertes aux agents et managers" },
+        { "name": "Annuaire RH CCIAMA", "description": "Compétences et disponibilités des agents" },
+        { "name": "Module BI", "description": "Tableau de bord et analyse" }
+      ],
+      "kpis": [
+        "Délai moyen de traitement par type de dossier",
+        "Taux de respect des SLA par service (cible : 95 %)",
+        "Charge moyenne par agent",
+        "Nombre d'escalades par semaine"
+      ],
+      "businessRules": [
+        "Tout dossier non traité dans 80 % du SLA déclenche une alerte managériale.",
+        "Aucun dossier ne peut être supprimé : seul un changement d'état est possible (traçabilité).",
+        "Les règles d'affectation sont auditées tous les trimestres."
+      ]
+    },
+    {
+      "code": "S15",
+      "title": "Gestion électronique des documents (GED)",
+      "tagline": "Toute la mémoire de la chambre, accessible et sécurisée",
+      "familyCode": "F5",
+      "beneficiaries": "Tous les agents CCIAMA, auditeurs, contrôleurs",
+      "channels": "Application interne, application mobile",
+      "targetDelay": "Recherche < 3 secondes sur 10 millions de documents",
+      "phase": "Phase 1 — M8",
+      "description": "Système de gestion électronique des documents couvrant à la fois les documents générés par les services (RCCM, certificats, attestations) et les documents internes (notes, contrats, courriers). Inclut numérisation, OCR, classement automatique, recherche plein-texte, gestion des versions et politique de conservation.",
+      "processSteps": [
+        "Tout document généré par les services usagers est automatiquement classé dans la GED.",
+        "Les documents papier sont numérisés par les agents, OCR appliqué, classement assisté.",
+        "Tout agent peut rechercher (plein-texte ou par métadonnée) selon ses droits d'accès.",
+        "Les versions sont conservées avec historique des modifications.",
+        "Les documents arrivés en fin de durée légale sont archivés ou détruits selon la politique."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Recherche", "description": "Barre de recherche puissante, filtres avancés, suggestions." },
+        { "name": "Écran 2 — Visionneuse", "description": "Aperçu de tout format, annotations, marqueurs." },
+        { "name": "Écran 3 — Numérisation", "description": "Interface dédiée aux opérateurs de numérisation." },
+        { "name": "Écran 4 — Gestion des versions", "description": "Historique, comparaison, restauration." },
+        { "name": "Écran 5 — Politique de conservation", "description": "Paramétrage des règles d'archivage et de destruction." }
+      ],
+      "dataFields": [
+        { "name": "Document", "type": "Fichier + métadonnées", "source": "Multi-canal" },
+        { "name": "Métadonnées", "type": "Schéma extensible", "source": "Saisie + extraction OCR" },
+        { "name": "Versions", "type": "Historique", "source": "À chaque modification" },
+        { "name": "Droits d'accès", "type": "ACL", "source": "Politique de sécurité" },
+        { "name": "Durée de conservation", "type": "Durée légale", "source": "Référentiel juridique" }
+      ],
+      "integrations": [
+        { "name": "Workflow", "description": "Stockage des pièces de dossier" },
+        { "name": "Moteur de recherche (Elasticsearch)", "description": "Indexation plein-texte" },
+        { "name": "Outil OCR", "description": "Extraction texte des documents scannés" },
+        { "name": "Archivage à valeur probante", "description": "Conservation longue durée des actes" }
+      ],
+      "kpis": [
+        "Nombre de documents indexés (cible : > 10 millions à 24 mois)",
+        "Temps de recherche moyen (cible : < 3 secondes)",
+        "Taux de précision OCR (cible : > 95 %)",
+        "Volume archivé par mois"
+      ],
+      "businessRules": [
+        "Tout document généré par le SI est versé automatiquement en GED.",
+        "La consultation des documents sensibles est tracée et auditable.",
+        "Les durées de conservation respectent les textes en vigueur (OHADA, droit commercial, fiscal)."
+      ]
+    },
+    {
+      "code": "S16",
+      "title": "Observatoire économique et tableaux de bord",
+      "tagline": "Comprendre l'économie tchadienne, données à l'appui",
+      "familyCode": "F5",
+      "beneficiaries": "Direction CCIAMA, État, partenaires, public éclairé",
+      "channels": "Portail public (données ouvertes), application interne (analyses)",
+      "targetDelay": "Indicateurs mensuels publiés au plus tard le 15 du mois suivant",
+      "phase": "Phase 3 — M18",
+      "description": "Système décisionnel agrégeant l'ensemble des données du SI consulaire pour produire des tableaux de bord, des analyses sectorielles, et un observatoire économique publié périodiquement. Une partie des données est rendue publique en open data pour stimuler l'écosystème.",
+      "processSteps": [
+        "Collecte automatique des données des services usagers et internes.",
+        "Croisement avec les données partenaires (DGI, INSEED, douanes).",
+        "Nettoyage et anonymisation pour la publication.",
+        "Production de tableaux de bord standardisés.",
+        "Publication mensuelle de l'observatoire (PDF + dataviz interactive).",
+        "Mise à disposition des données en open data via API."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Tableau de bord direction", "description": "Indicateurs clés de l'activité consulaire en temps réel." },
+        { "name": "Écran 2 — Analyses sectorielles", "description": "Vue par secteur d'activité, géographie, taille." },
+        { "name": "Écran 3 — Observatoire public", "description": "Dataviz interactives, téléchargement de rapports." },
+        { "name": "Écran 4 — Portail open data", "description": "Catalogue de jeux de données, API documentée." }
+      ],
+      "dataFields": [
+        { "name": "Entrepôt de données (data warehouse)", "type": "Schéma en étoile", "source": "ETL nocturne" },
+        { "name": "Indicateurs", "type": "Mesures + dimensions", "source": "Calculs définis" },
+        { "name": "Données ouvertes", "type": "Jeux anonymisés", "source": "Publication open data" },
+        { "name": "Métadonnées open data", "type": "DCAT", "source": "Standard européen" }
+      ],
+      "integrations": [
+        { "name": "Outil de BI (Power BI, Metabase, Apache Superset)", "description": "Visualisation et analyse" },
+        { "name": "Plateforme open data", "description": "Mise à disposition publique" },
+        { "name": "DGI, INSEED, douanes", "description": "Échange de données macroéconomiques" }
+      ],
+      "kpis": [
+        "Nombre de jeux de données publiés (cible : 30 à 24 mois)",
+        "Nombre de téléchargements / appels API par mois",
+        "Délai de publication de l'observatoire (cible : J+15)",
+        "Citations de l'observatoire dans la presse économique"
+      ],
+      "businessRules": [
+        "Toute donnée publiée est anonymisée pour respecter la vie privée et le secret des affaires.",
+        "Les jeux open data sont publiés sous licence ouverte (équivalent ODbL).",
+        "Les indicateurs internes sont accessibles selon le rôle et la hiérarchie."
+      ]
+    },
+    {
+      "code": "S17",
+      "title": "Module financier et comptable intégré",
+      "tagline": "Une comptabilité fiable, en temps réel, audit-ready",
+      "familyCode": "F5",
+      "beneficiaries": "Direction financière CCIAMA, agents comptables, auditeurs",
+      "channels": "Application interne sécurisée",
+      "targetDelay": "Comptabilisation temps réel",
+      "phase": "Phase 2 — M11",
+      "description": "Système comptable intégré au SI consulaire : chaque acte génère automatiquement les écritures comptables associées (recettes de services, encaissements, factures fournisseurs, paie). Conforme au plan comptable OHADA. Permet la production automatique des états financiers et le suivi budgétaire en temps réel.",
+      "processSteps": [
+        "Chaque opération métier (paiement de service, cotisation, etc.) génère une écriture comptable.",
+        "Les factures fournisseurs sont saisies / scannées, soumises à workflow d'approbation.",
+        "Suivi budgétaire en continu par centre de coût.",
+        "Rapprochement bancaire automatique (import des relevés).",
+        "Production automatique du grand livre, du bilan, du compte de résultat.",
+        "Export pour les commissaires aux comptes et l'État."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Tableau de bord financier", "description": "Trésorerie, recettes, dépenses, alertes." },
+        { "name": "Écran 2 — Saisie / contrôle d'écritures", "description": "Plan comptable OHADA, contrôles de cohérence." },
+        { "name": "Écran 3 — Suivi budgétaire", "description": "Réalisé vs prévu par poste, par centre de coût." },
+        { "name": "Écran 4 — Rapprochement bancaire", "description": "Import des relevés, lettrage assisté." },
+        { "name": "Écran 5 — États financiers", "description": "Bilan, compte de résultat, annexes." }
+      ],
+      "dataFields": [
+        { "name": "Écriture comptable", "type": "Débit/Crédit + comptes", "source": "Génération auto + saisie" },
+        { "name": "Plan comptable", "type": "Référentiel OHADA", "source": "Standard" },
+        { "name": "Budget", "type": "Lignes par centre de coût", "source": "Budget annuel validé" },
+        { "name": "Relevés bancaires", "type": "Import standardisé", "source": "Banques partenaires" }
+      ],
+      "integrations": [
+        { "name": "Plateforme de paiement", "description": "Encaissements automatiques" },
+        { "name": "Banques de la place", "description": "Import des relevés et virements" },
+        { "name": "SIRH", "description": "Comptabilisation des paies" },
+        { "name": "DGI", "description": "Télédéclarations fiscales" }
+      ],
+      "kpis": [
+        "Délai de clôture mensuelle (cible : ≤ 5 jours)",
+        "Taux d'automatisation des écritures (cible : 80 %)",
+        "Délai de rapprochement bancaire (cible : J+1)",
+        "Nombre de redressements en audit (cible : zéro significatif)"
+      ],
+      "businessRules": [
+        "Conformité stricte au plan comptable OHADA révisé.",
+        "Aucune écriture ne peut être supprimée : seules les contrepassations sont autorisées.",
+        "Validation à double clé pour les écritures supérieures à un seuil."
+      ]
+    },
+    {
+      "code": "S18",
+      "title": "Système d'information ressources humaines (SIRH)",
+      "tagline": "Gérer le capital humain de la chambre, en toute fluidité",
+      "familyCode": "F5",
+      "beneficiaries": "Direction des ressources humaines, managers, agents CCIAMA",
+      "channels": "Application interne, portail RH self-service, application mobile",
+      "targetDelay": "Self-service immédiat pour la majorité des opérations",
+      "phase": "Phase 2 — M13",
+      "description": "SIRH couvrant le cycle complet de l'agent : recrutement, dossier individuel, paie, congés, formation, évaluation annuelle. Inclut un portail self-service permettant à chaque agent de gérer ses informations, demander un congé, consulter son bulletin, suivre son plan de formation.",
+      "processSteps": [
+        "Tenue du dossier de chaque agent (administratif, contrat, formation, évaluation).",
+        "Workflow de validation des congés et absences (manager + RH).",
+        "Calcul automatique de la paie chaque mois, génération des bulletins.",
+        "Évaluation annuelle structurée avec objectifs et restitutions.",
+        "Plan de formation individuel suivi en lien avec le catalogue de formation."
+      ],
+      "screens": [
+        { "name": "Écran 1 — Mon profil agent", "description": "Self-service : coordonnées, contrat, RIB, ayants droit." },
+        { "name": "Écran 2 — Mes congés", "description": "Solde, demandes, validation, calendrier équipe." },
+        { "name": "Écran 3 — Mes bulletins de paie", "description": "Historique téléchargeable, attestations." },
+        { "name": "Écran 4 — Mon évaluation", "description": "Auto-évaluation, entretien, objectifs annuels." },
+        { "name": "Écran 5 — Manager", "description": "Validation des congés, vue d'équipe, évaluations à mener." },
+        { "name": "Écran 6 — DRH", "description": "Pilotage global, masse salariale, recrutements, formations." }
+      ],
+      "dataFields": [
+        { "name": "Dossier agent", "type": "Données chiffrées sensibles", "source": "RH + agent" },
+        { "name": "Contrat", "type": "Document structuré", "source": "Génération depuis modèle" },
+        { "name": "Bulletin de paie", "type": "Calcul mensuel", "source": "Moteur de paie" },
+        { "name": "Congés", "type": "Demande + validation", "source": "Workflow" },
+        { "name": "Évaluation annuelle", "type": "Formulaire structuré", "source": "Agent + manager" }
+      ],
+      "integrations": [
+        { "name": "Comptabilité", "description": "Comptabilisation des paies" },
+        { "name": "CNPS", "description": "Déclarations sociales" },
+        { "name": "DGI", "description": "Déclarations fiscales sur salaires" },
+        { "name": "Plateforme formation", "description": "Suivi du plan de formation des agents" }
+      ],
+      "kpis": [
+        "Taux d'utilisation du self-service (cible : 90 %)",
+        "Délai de validation des congés (cible : ≤ 48 h)",
+        "Taux d'agents évalués annuellement (cible : 100 %)",
+        "Fiabilité de la paie (cible : < 0,1 % de réclamations)"
+      ],
+      "businessRules": [
+        "Le dossier agent est conservé selon la durée légale après départ.",
+        "L'accès aux données salariales individuelles est strictement limité.",
+        "Tout changement de situation administrative déclenche un contrôle RH."
+      ]
+    }
+  ]
+}

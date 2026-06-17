@@ -1,0 +1,52 @@
+{
+  "news": [
+    { "cat": "communique", "catLabel": "Communiqué", "date": "21 mai 2026", "dateShort": "21 MAI", "title": "Installation de l'Administrateur Provisoire de la CCIAMA", "excerpt": "Suite à la décision des autorités, Monsieur Abderrahmane Gademi a été installé comme administrateur provisoire pour conduire une démarche concertée vers l'élection du nouvel exécutif.", "author": "Direction de la Communication", "readTime": "4 min de lecture", "orderIndex": 0 },
+    { "cat": "evenement", "catLabel": "Événement", "date": "19 mai 2026", "dateShort": "19 MAI", "title": "Forum d'Investissement Tchad-International", "excerpt": "La CCIAMA a participé activement au forum pour présenter les opportunités d'affaires dans les secteurs de l'agro-industrie, des mines et de l'artisanat.", "author": "Direction de la Promotion", "readTime": "3 min de lecture", "orderIndex": 1 },
+    { "cat": "decret", "catLabel": "Décret", "date": "17 mai 2026", "dateShort": "17 MAI", "title": "Nouveau cadre pour les formalités des PME/PMI", "excerpt": "Le gouvernement a publié un nouveau décret simplifiant les démarches de création d'entreprise. La CCIAMA accompagne les opérateurs dans cette transition.", "author": "Secrétariat Général", "readTime": "6 min de lecture", "orderIndex": 2 },
+    { "cat": "appel", "catLabel": "Appel d'offres", "date": "14 mai 2026", "dateShort": "14 MAI", "title": "Appel à manifestation d'intérêt — Projet Tchad Connexion 2030", "excerpt": "Dans le cadre de la vision Tchad Connexion 2030, la CCIAMA lance un appel pour la sélection de partenaires techniques et financiers.", "author": "Direction des Projets", "readTime": "5 min de lecture", "orderIndex": 3 },
+    { "cat": "communique", "catLabel": "Communiqué", "date": "12 mai 2026", "dateShort": "12 MAI", "title": "Lancement du programme d'appui aux femmes entrepreneures", "excerpt": "La CCIAMA déploie un nouveau fonds d'accompagnement spécifique pour les femmes évoluant dans les secteurs de la transformation agricole et de l'artisanat.", "author": "Direction de la Formation", "readTime": "3 min de lecture", "orderIndex": 4 },
+    { "cat": "evenement", "catLabel": "Événement", "date": "10 mai 2026", "dateShort": "10 MAI", "title": "Rencontre B2B : Secteur Privé et Investisseurs Étrangers", "excerpt": "Une délégation d'investisseurs a été reçue par le bureau exécutif de la CCIAMA pour explorer des partenariats dans le secteur de l'élevage et de la pêche.", "author": "Direction de la Promotion", "readTime": "2 min de lecture", "orderIndex": 5 }
+  ],
+  "documents": [
+    { "type": "decret", "typeLabel": "Décret", "ref": "N°2026-0184/PR/PM", "date": "17 mai 2026", "title": "Décret portant organisation des services déconcentrés de l'État", "summary": "Précise les missions et l'organisation des services déconcentrés aux niveaux provincial, départemental et communal.", "pages": 24, "size": "1.2 Mo", "orderIndex": 0 },
+    { "type": "loi", "typeLabel": "Loi", "ref": "N°012/PR/2026", "date": "08 mai 2026", "title": "Loi de finances rectificative pour l'exercice 2026", "summary": "Modification du budget de l'État pour tenir compte des priorités de développement et des engagements internationaux.", "pages": 86, "size": "3.4 Mo", "orderIndex": 1 },
+    { "type": "arrete", "typeLabel": "Arrêté", "ref": "N°245/MAT/SG/2026", "date": "02 mai 2026", "title": "Arrêté fixant les modalités de délivrance de l'acte de naissance numérique", "summary": "Procédure, pièces justificatives et délais applicables à la délivrance dématérialisée des actes d'état civil.", "pages": 12, "size": "640 ko", "orderIndex": 2 },
+    { "type": "rapport", "typeLabel": "Rapport", "ref": "RAP-2025-ANNUEL", "date": "28 avril 2026", "title": "Rapport annuel d'activités de l'administration — Exercice 2025", "summary": "Bilan complet des actions menées, indicateurs de performance et perspectives pour l'année 2026.", "pages": 142, "size": "8.7 Mo", "orderIndex": 3 },
+    { "type": "circulaire", "typeLabel": "Circulaire", "ref": "N°018/PM/CAB/2026", "date": "20 avril 2026", "title": "Circulaire relative à la dématérialisation des marchés publics", "summary": "Instructions adressées aux ordonnateurs et aux personnes responsables des marchés.", "pages": 8, "size": "420 ko", "orderIndex": 4 },
+    { "type": "decret", "typeLabel": "Décret", "ref": "N°2026-0142/PR/PM", "date": "12 avril 2026", "title": "Décret portant statut particulier du corps des inspecteurs du Trésor", "summary": "Définition du statut, des grades, des rémunérations et des conditions d'avancement applicables au corps.", "pages": 36, "size": "1.8 Mo", "orderIndex": 5 },
+    { "type": "loi", "typeLabel": "Loi", "ref": "N°008/PR/2026", "date": "04 avril 2026", "title": "Loi d'orientation sur la transition énergétique nationale", "summary": "Cadre stratégique et objectifs à l'horizon 2035 pour le mix énergétique de la République du Tchad.", "pages": 58, "size": "2.6 Mo", "orderIndex": 6 },
+    { "type": "rapport", "typeLabel": "Rapport", "ref": "RAP-2026-T1", "date": "30 mars 2026", "title": "Rapport trimestriel sur l'exécution budgétaire — T1 2026", "summary": "État d'exécution des recettes et des dépenses au terme du premier trimestre.", "pages": 64, "size": "4.1 Mo", "orderIndex": 7 },
+    { "type": "arrete", "typeLabel": "Arrêté", "ref": "N°189/MEF/SG/2026", "date": "22 mars 2026", "title": "Arrêté portant nomenclature des pièces justificatives des dépenses publiques", "summary": "Liste actualisée des pièces requises pour la liquidation et le paiement des dépenses de l'État.", "pages": 28, "size": "1.4 Mo", "orderIndex": 8 }
+  ],
+  "projects": [
+    { "status": "ongoing", "statusLabel": "En cours", "title": "Tchad Connexion 2030", "period": "2024 — 2030", "budget": "30 Mds USD", "partner": "Partenaires Multiples", "progress": 15, "desc": "Vision stratégique : 268 projets et réformes pour la connexion physique, numérique, économique et internationale du pays.", "orderIndex": 0 },
+    { "status": "ongoing", "statusLabel": "En cours", "title": "Dispositif d'appui aux femmes entrepreneures", "period": "2025 — 2028", "budget": "2,5 Mds FCFA", "partner": "Banque Mondiale", "progress": 42, "desc": "Renforcement des capacités et accès au financement pour les PME dirigées par des femmes.", "orderIndex": 1 },
+    { "status": "planned", "statusLabel": "Programmé", "title": "Modernisation des centres de formation", "period": "2026 — 2029", "budget": "4,2 Mds FCFA", "partner": "CPCCAF", "progress": 0, "desc": "Réhabilitation et équipement du CFPP et de l'École pratique d'agriculture.", "orderIndex": 2 },
+    { "status": "ongoing", "statusLabel": "En cours", "title": "Projet Régional de Facilité des Échanges", "period": "2024 — 2027", "budget": "8 Mds FCFA", "partner": "CEMAC / UE", "progress": 55, "desc": "Amélioration des corridors commerciaux et simplification des procédures douanières pour le secteur privé.", "orderIndex": 3 }
+  ],
+  "organisms": [
+    { "kind": "organism", "name": "Agence Nationale des Investissements et des Exportations", "short": "ANIE", "url": "#", "color": "#C8961E", "mark": "growth", "orderIndex": 0 },
+    { "kind": "organism", "name": "Centre de Formation Professionnelle", "short": "CFPP", "url": "#", "color": "#0E2A5E", "mark": "book", "orderIndex": 1 },
+    { "kind": "organism", "name": "École Pratique d'Agriculture", "short": "EPA", "url": "#", "color": "#1F5C1F", "mark": "grain", "orderIndex": 2 },
+    { "kind": "organism", "name": "Ministère du Commerce", "short": "TUTELLE", "url": "#", "color": "#B81E2C", "mark": "tower", "orderIndex": 3 },
+    { "kind": "partner", "name": "Chambre Islamique de Commerce", "short": "CICD", "url": "#", "color": "#1F5C1F", "mark": "globe", "orderIndex": 4 },
+    { "kind": "partner", "name": "Fédération Mondiale des Chambres", "short": "WCF", "url": "#", "color": "#1F5C8C", "mark": "circle", "orderIndex": 5 },
+    { "kind": "partner", "name": "Chambres Consulaires Francophones", "short": "CPCCAF", "url": "#", "color": "#0E2A5E", "mark": "stars", "orderIndex": 6 },
+    { "kind": "partner", "name": "Fédération des Chambres d'Afrique Centrale", "short": "FCCAC", "url": "#", "color": "#3A3A3A", "mark": "scale", "orderIndex": 7 },
+    { "kind": "partner", "name": "Organisation Panafricaine", "short": "PACCI", "url": "#", "color": "#7A5A0E", "mark": "hands", "orderIndex": 8 }
+  ],
+  "flash": [
+    { "severity": "danger", "label": "Alerte", "text": "Suspension temporaire des dépôts physiques au guichet central — Lundi 25 mai 2026 pour maintenance.", "orderIndex": 0 },
+    { "severity": "warning", "label": "Information importante", "text": "Date limite de dépôt des candidatures à l'appel à manifestation d'intérêt : 30 juin 2026 à 16h00.", "orderIndex": 1 },
+    { "severity": "success", "label": "Bonne nouvelle", "text": "Plus de 1,8 million de Tchadiens ont désormais activé leur identifiant numérique national.", "orderIndex": 2 },
+    { "severity": "info", "label": "Communiqué", "text": "Le portail évolue : nouvelle version disponible avec assistance par intelligence artificielle.", "orderIndex": 3 },
+    { "severity": "warning", "label": "Rappel", "text": "Pensez à mettre à jour vos coordonnées dans votre espace personnel avant le 1er juin 2026.", "orderIndex": 4 }
+  ],
+  "quickActions": [
+    { "ic": "doc", "title": "Devenir membre", "desc": "Adhésion et renouvellement", "link": "/services", "orderIndex": 0 },
+    { "ic": "form", "title": "Effectuer une formalité", "desc": "Création, modification, attestations", "link": "/services", "orderIndex": 1 },
+    { "ic": "track", "title": "Suivre un dossier", "desc": "Vérifier l'état d'avancement", "link": "/tracker", "orderIndex": 2 },
+    { "ic": "pay", "title": "Paiements en ligne", "desc": "Frais d'adhésion et services", "link": "/services", "orderIndex": 3 },
+    { "ic": "appoint", "title": "Consulter les opportunités", "desc": "Appels d'offres et B2B", "link": "/services", "orderIndex": 4 }
+  ]
+}
