@@ -244,8 +244,21 @@ export function ProjetsPage() {
               <h3>{p.title}</h3>
               <p>{p.desc}</p>
               <div className="project-progress">
-                <div className="bar"><div className="fill" style={{ width: `${p.progress}%` }} /></div>
-                <div className="progress-label">{p.progress}% réalisé</div>
+                <div className="progress-ring" role="img" aria-label={`${p.progress}% réalisé`}>
+                  <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+                    <circle className="ring-track" cx="32" cy="32" r="29" />
+                    <circle
+                      className="ring-fill"
+                      cx="32" cy="32" r="29"
+                      style={{
+                        strokeDasharray: 2 * Math.PI * 29,
+                        strokeDashoffset: (2 * Math.PI * 29) * (1 - Math.min(100, Math.max(0, p.progress)) / 100),
+                      }}
+                    />
+                  </svg>
+                  <span className="ring-pct">{p.progress}%</span>
+                </div>
+                <div className="progress-label">réalisé</div>
               </div>
               <div className="project-meta">
                 <div><div className="k">Budget</div><div className="v">{p.budget}</div></div>

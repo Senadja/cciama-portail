@@ -1941,24 +1941,49 @@
   line-height: 1.25;
 }
 .project-card p { font-size: var(--text-sm); color: var(--color-ink-soft); margin: 0; line-height: 1.55; }
-.project-progress { margin-top: 4px; }
-.project-progress .bar {
-  height: 6px;
-  background: var(--color-cream-warm);
-  border-radius: 100px;
-  overflow: hidden;
+.project-progress {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.project-progress .fill {
-  height: 100%;
-  background: var(--color-navy);
-  border-radius: 100px;
-  transition: width 0.3s;
+.progress-ring {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+.progress-ring svg {
+  display: block;
+  transform: rotate(-90deg); /* démarre l'anneau en haut */
+}
+.progress-ring .ring-track {
+  fill: none;
+  stroke: var(--color-cream-warm);
+  stroke-width: 6;
+}
+.progress-ring .ring-fill {
+  fill: none;
+  stroke: var(--color-navy);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease;
+}
+.progress-ring .ring-pct {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-navy);
 }
 .progress-label {
   font-size: 12px;
   font-family: var(--font-mono);
   color: var(--color-ink-mute);
-  margin-top: 4px;
 }
 .project-meta {
   display: grid;
