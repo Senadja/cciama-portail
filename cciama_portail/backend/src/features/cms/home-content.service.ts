@@ -42,7 +42,7 @@ export class HomeContentService implements OnModuleInit {
       await this.prisma.homePageContent.create({
         data: {
           id: 'singleton',
-          heroEyebrow: "Chambre de Commerce, d'Industrie, d'Agriculture, des Mines et de l'Artisanat",
+          heroEyebrow: "Chambre de Commerce, d'Industrie, d'Agriculture, des Mines et de l'Artisanat du Tchad",
           heroTitle: "La voix institutionnelle du secteur privé tchadien.",
           heroDesc: "La CCIAMA accompagne, représente et défend les acteurs économiques du Tchad pour bâtir un secteur privé fort, structuré, compétitif et connecté aux opportunités.",
           heroCtaText: "Découvrir les services",

@@ -281,9 +281,9 @@ export function ContactPage() {
           <div className="contact-info">
             <h2>Coordonnées officielles</h2>
             {([
-              { icon: <MapPin size={18} />, k: 'Adresse', v: 'Avenue MOLL, B.P. 458\nN\'Djamena, République du Tchad' },
-              { icon: <Phone size={18} />, k: 'Téléphone', v: '+235 22 52 52 64 (Standard)\n+235 63 58 01 83' },
-              { icon: <Mail size={18} />, k: 'Courrier électronique', v: 'contact@cciama-tchad.com\ncommunication@cciama-tchad.com' },
+              { icon: <MapPin size={18} />, k: 'Adresse', v: 'Avenue Karim Nassour, B.P. 458\nN\'Djamena, République du Tchad' },
+              { icon: <Phone size={18} />, k: 'Téléphone', v: '+235 66 28 07 63' },
+              { icon: <Mail size={18} />, k: 'Courrier électronique', v: 'info.cciama@gmail.com' },
               { icon: <Clock size={18} />, k: 'Horaires d\'ouverture', v: 'Lundi à vendredi\n07h30 — 15h30 (sauf jours fériés)' },
             ] as { icon: React.ReactElement; k: string; v: string }[]).map((c, i) => (
               <div key={i} className="ci-row">

@@ -26,9 +26,9 @@ export class PlatformSettingsService implements OnModuleInit {
       { key: 'favicon', value: '/cciama-logo.png', type: 'image', label: 'Favicon du navigateur' },
       { key: 'modal_duration', value: '5', type: 'number', label: 'Durée du modal visiteur (secondes)' },
       { key: 'marquee_speed', value: '40', type: 'number', label: 'Vitesse de défilement des logos' },
-      { key: 'footer_address', value: "Avenue MOLL, B.P. 458 · N'Djamena, République du Tchad", type: 'text', label: 'Adresse physique' },
-      { key: 'footer_phones', value: '+235 22 52 52 64\n+235 63 58 01 83', type: 'text', label: 'Téléphones standards' },
-      { key: 'footer_email', value: 'contact@cciama-tchad.com', type: 'text', label: 'Email de contact officiel' },
+      { key: 'footer_address', value: "Avenue Karim Nassour, B.P. 458 · N'Djamena, République du Tchad", type: 'text', label: 'Adresse physique' },
+      { key: 'footer_phones', value: '+235 66 28 07 63', type: 'text', label: 'Téléphones standards' },
+      { key: 'footer_email', value: 'info.cciama@gmail.com', type: 'text', label: 'Email de contact officiel' },
       { key: 'meta_desc', value: "Portail officiel de la Chambre de Commerce, d'Industrie, d'Agriculture, des Mines et de l'Artisanat (CCIAMA) de la République du Tchad. Espace d'information, formalités d'entreprises et accompagnement des acteurs économiques.", type: 'text', label: 'Description SEO (Meta Description)' },
       {
         key: 'footer_socials',

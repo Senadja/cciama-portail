@@ -18,7 +18,7 @@ export function HomePage() {
   const { data: catalogue } = useServiceCatalogue();
   const previewServices = (catalogue ?? []).flatMap(f => f.services ?? []).slice(0, 3);
 
-  const heroEyebrow = home?.heroEyebrow || "Chambre de Commerce, d'Industrie, d'Agriculture, des Mines et de l'Artisanat";
+  const heroEyebrow = home?.heroEyebrow || "Chambre de Commerce, d'Industrie, d'Agriculture, des Mines et de l'Artisanat du Tchad";
   const heroTitle = home?.heroTitle || "La voix institutionnelle du secteur privé tchadien.";
   const heroDesc = home?.heroDesc || "La CCIAMA accompagne, représente et défend les acteurs économiques du Tchad pour bâtir un secteur privé fort, structuré, compétitif et connecté aux opportunités.";
   const heroCtaText = home?.heroCtaText || "Découvrir les services";

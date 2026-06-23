@@ -297,7 +297,7 @@ export function GovFooter() {
                     <span key={idx}>{line}<br/></span>
                   ))
                 ) : (
-                  <>Avenue MOLL<br/>B.P. 458 · N'Djamena, Tchad</>
+                  <>Avenue Karim Nassour<br/>B.P. 458 · N'Djamena, Tchad</>
                 )}
               </div>
             </div>
@@ -314,7 +314,7 @@ export function GovFooter() {
                     <span key={idx}>{line}<br/></span>
                   ))
                 ) : (
-                  <>+235 22 52 52 64<br/>+235 63 58 01 83</>
+                  <>+235 66 28 07 63</>
                 )}
               </div>
             </div>
@@ -326,8 +326,8 @@ export function GovFooter() {
             <div>
               <div className="k">Courriel</div>
               <div className="v">
-                <a href={`mailto:${settings?.footer_email || 'contact@cciama-tchad.com'}`}>
-                  {settings?.footer_email || 'contact@cciama-tchad.com'}
+                <a href={`mailto:${settings?.footer_email || 'info.cciama@gmail.com'}`}>
+                  {settings?.footer_email || 'info.cciama@gmail.com'}
                 </a>
               </div>
             </div>
