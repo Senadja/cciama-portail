@@ -11,8 +11,10 @@ RUN apt-get update \
 WORKDIR /app
 
 # 1. Dépendances (dev incluses : @nestjs/cli pour build, prisma + ts-node pour migrate/seed)
+#    --legacy-peer-deps : nest-keycloak-connect déclare un peer @nestjs/common <11
+#    alors que le projet est en NestJS 11 (conflit connu, tree local OK).
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # 2. Génération du client Prisma (nécessite le schéma)
 COPY prisma ./prisma

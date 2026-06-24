@@ -6,8 +6,11 @@ WORKDIR /app
 ARG VITE_API_URL=http://localhost:3000/api/v1
 ENV VITE_API_URL=$VITE_API_URL
 
+# npm install (et non `npm ci`) : le package-lock.json a été généré sous Windows
+# et ne contient pas les binaires natifs Linux (lightningcss / tailwind-oxide,
+# fallbacks @emnapi/*). `npm install` résout les bons binaires pour la plateforme de build.
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install --legacy-peer-deps --no-audit --no-fund
 COPY . .
 RUN npm run build
 
