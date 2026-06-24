@@ -1,0 +1,77 @@
+# ───────────────────────────────────────────────────────────────────────────
+# Déploiement production CCIAMA — Dokploy (service de type « Docker Compose »)
+#
+# Domaines à mapper dans Dokploy (onglet « Domains ») :
+#   • service "frontend" → port 80   (site public + back-office CMS)
+#   • service "backend"  → port 3000 (API, exposée sous /api/v1)
+#   • service "minio"    → port 9000 (OPTIONNEL : requis seulement pour afficher
+#                                     publiquement les médias uploadés via le CMS)
+#
+# Variables à définir dans Dokploy (onglet « Environment ») : voir .env.prod.example
+# ───────────────────────────────────────────────────────────────────────────
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-cciama_db}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-cciama_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks: [cciama]
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    volumes:
+      - miniodata:/data
+    networks: [cciama]
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      # Connexion interne au service postgres (réseau compose, port interne 5432)
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-cciama_db}?schema=public
+      PORT: "3000"
+      JWT_SECRET: ${JWT_SECRET:?definis JWT_SECRET dans Dokploy}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-minio}
+      MINIO_PORT: "${MINIO_PORT:-9000}"
+      MINIO_USE_SSL: "${MINIO_USE_SSL:-false}"
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-cciama-uploads}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [cciama]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:?definis VITE_API_URL = https://TON-DOMAINE-API/api/v1}
+    depends_on:
+      - backend
+    networks: [cciama]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  miniodata:
+
+networks:
+  cciama:
+    driver: bridge
