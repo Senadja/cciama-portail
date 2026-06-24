@@ -710,6 +710,43 @@
   font-weight: 400;
 }
 
+/* Services mega-menu */
+.gov-dropdown-services {
+  grid-template-columns: repeat(2, minmax(230px, 1fr));
+  gap: 0 18px;
+  min-width: 540px;
+  padding: 14px 16px 10px;
+}
+.nav-item.open .gov-dropdown-services { display: grid; }
+.svc-dd-fam {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--color-ink-mute);
+  padding: 10px 10px 4px;
+}
+.gov-dropdown-services a.svc-dd-item {
+  padding: 6px 10px;
+  border-left: 0;
+  border-radius: 6px;
+  color: var(--color-ink-soft);
+}
+.gov-dropdown-services a.svc-dd-item:hover {
+  background: var(--color-cream-warm);
+  color: var(--color-navy);
+  border-left: 0;
+}
+.gov-dropdown-services a.svc-dd-all {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  padding: 10px 10px 4px;
+  border-top: 1px solid var(--color-rule-soft);
+  border-left: 0;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
 /* Nav item (for dropdown) */
 .nav-item {
   position: relative;
@@ -2669,6 +2706,7 @@
     display: none;
   }
   .nav-item.open .gov-dropdown { display: block; }
+  .gov-dropdown-services { min-width: 0; padding: 0; }
 }
 @media (max-width: 640px) {
   /* Layout */

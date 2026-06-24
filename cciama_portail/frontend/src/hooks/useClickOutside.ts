@@ -8,8 +8,8 @@ export function useClickOutside<T extends HTMLElement>(handler: () => void): Ref
         handler();
       }
     };
-    document.addEventListener('click', listener);
-    return () => document.removeEventListener('click', listener);
+    document.addEventListener('mousedown', listener);
+    return () => document.removeEventListener('mousedown', listener);
   }, [handler]);
   return ref;
 }

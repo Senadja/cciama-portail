@@ -4,7 +4,7 @@ import { Search, FileText, ChevronDown, Menu, X } from 'lucide-react';
 import { useLangStore } from '@/stores/useLangStore';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { NAV_ITEMS, LANGS } from '@/data';
-import { usePlatformSettings } from '@/hooks/useCms';
+import { usePlatformSettings, useServiceCatalogue } from '@/hooks/useCms';
 
 export function GovHeader({ onGoTo }: { onGoTo: (route: string) => void }) {
   const location = useLocation();
@@ -99,6 +99,18 @@ export function GovHeader({ onGoTo }: { onGoTo: (route: string) => void }) {
       >
         <div className="container">
           {NAV_ITEMS.map(item => {
+            if (item.id === 'services') {
+              return (
+                <ServicesNavDropdown
+                  key={item.id}
+                  label={item.label}
+                  isActive={location.pathname.startsWith('/services')}
+                  isOpen={openDropdown === item.id}
+                  onToggle={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
+                  onClose={() => setOpenDropdown(null)}
+                />
+              );
+            }
             if (item.children) {
               return (
                 <NavDropdown
@@ -174,6 +186,54 @@ function NavDropdown({ item, isActive, isOpen, onToggle, onClose }: {
               <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>{child.label}</span>
             </Link>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ServicesNavDropdown({ label, isActive, isOpen, onToggle, onClose }: {
+  label: string;
+  isActive: boolean;
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+}) {
+  const ref = useClickOutside<HTMLDivElement>(onClose);
+  const { data: catalogue } = useServiceCatalogue();
+  const families = catalogue ?? [];
+
+  return (
+    <div className={`nav-item ${isOpen ? 'open' : ''}`} ref={ref}>
+      <a
+        className={isActive ? 'active' : ''}
+        onClick={(e) => { e.preventDefault(); onToggle(); }}
+        href="#"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+      >
+        {label}
+        <ChevronDown size={12} className="nav-caret" style={{ marginLeft: 4 }} />
+      </a>
+      {isOpen && (
+        <div className="gov-dropdown gov-dropdown-services" role="menu">
+          {families.map(fam => (
+            <div className="svc-dd-group" key={fam.id}>
+              <div className="svc-dd-fam">{fam.name}</div>
+              {(fam.services ?? []).map(svc => (
+                <Link
+                  key={svc.id}
+                  to={`/services/${svc.code}`}
+                  onClick={onClose}
+                  role="menuitem"
+                  className="svc-dd-item"
+                >
+                  {svc.title}
+                </Link>
+              ))}
+            </div>
+          ))}
+          <Link to="/services" onClick={onClose} className="svc-dd-all">Tous les services →</Link>
         </div>
       )}
     </div>
