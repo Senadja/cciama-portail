@@ -2229,7 +2229,7 @@
   position: fixed;
   bottom: 76px;
   right: 24px;
-  z-index: 95;
+  z-index: 999;
   background: var(--color-navy);
   color: white;
   border: 0;
@@ -2272,9 +2272,9 @@
   position: fixed;
   bottom: 72px;
   right: 24px;
-  z-index: 95;
+  z-index: 1000;
   width: 400px;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100dvh - 96px);
   background: var(--color-paper);
   border: 1px solid var(--color-rule);
   border-radius: 16px;
@@ -2314,12 +2314,12 @@
 .chat-close:hover { color: white; }
 .chat-body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  max-height: 400px;
 }
 .chat-msg { display: flex; gap: 10px; }
 .chat-msg.user { flex-direction: row-reverse; }
@@ -2761,7 +2761,7 @@
   /* Chat — compact on phone */
   .chat-launcher-label { display: none; }
   .chat-launcher { padding: 14px; bottom: 70px; }
-  .chat-panel { width: calc(100vw - 24px); right: 12px; bottom: 70px; height: calc(100vh - 130px); }
+  .chat-panel { width: calc(100vw - 24px); right: 12px; bottom: 70px; height: calc(100dvh - 130px); }
   
   /* Flash band Marquee on Mobile */
   @keyframes mobile-marquee {

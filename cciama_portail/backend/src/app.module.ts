@@ -11,6 +11,7 @@ import { SecurityModule } from './core/security/security.module';
 import { SseModule } from './core/sse/sse.module';
 import { CmsModule } from './features/cms/cms.module';
 import { AuthModule } from './features/auth/auth.module';
+import { AssistantModule } from './features/assistant/assistant.module';
 import { HttpLoggerMiddleware } from './core/logger/http-logger.middleware';
 
 @Module({
@@ -31,6 +32,7 @@ import { HttpLoggerMiddleware } from './core/logger/http-logger.middleware';
     SseModule,
     AuthModule,
     CmsModule,
+    AssistantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, MessageCircle } from 'lucide-react';
+import { API_BASE } from '@/lib/api';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 const SUGGESTIONS = [
   "Comment obtenir un acte de naissance ?",
@@ -80,6 +82,8 @@ export function ChatBubble() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useClickOutside<HTMLDivElement>(() => setOpen(false));
 
   useEffect(() => {
     if (bodyRef.current) {
@@ -87,19 +91,44 @@ export function ChatBubble() {
     }
   }, [messages]);
 
-  const sendMessage = (text: string) => {
+  // À l'ouverture : focus du champ + fermeture au clavier (Échap)
+  useEffect(() => {
+    if (!open) return;
+    inputRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
+
+  const sendMessage = async (text: string) => {
     if (!text.trim() || loading) return;
-    setMessages(prev => [...prev, { role: 'user', text }]);
+    const next: Message[] = [...messages, { role: 'user', text }];
+    setMessages(next);
     setInput('');
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      // Historique au format OpenAI/Groq (borné aux 20 derniers tours)
+      const history = next.slice(-20).map(m => ({
+        role: m.role === 'bot' ? 'assistant' : 'user',
+        content: m.text,
+      }));
+      const res = await fetch(`${API_BASE}/assistant/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as { reply: string };
+      setMessages(prev => [...prev, { role: 'bot', text: data.reply }]);
+    } catch {
       setMessages(prev => [...prev, {
         role: 'bot',
-        text: "Merci pour votre question. Pour obtenir une **Carte de Membre de la CCIAMA**, vous devez :\n\n1. Remplir le formulaire d'adhésion en ligne\n2. Fournir une copie de votre **Registre du Commerce (RCCM)**\n3. Régler les frais annuels selon votre catégorie\n\n> Le délai moyen est de **48 heures** après dépôt du dossier complet.\n\nVous pouvez initier cette démarche via la rubrique [Services aux entreprises](/services).",
+        text: "Désolé, je rencontre un problème technique. Réessayez dans un instant, ou contactez-nous via la page [Contact](/contact).",
       }]);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -126,6 +155,7 @@ export function ChatBubble() {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={panelRef}
             className="chat-panel"
             role="dialog"
             aria-label="Assistant virtuel CCIAMA"
@@ -196,6 +226,7 @@ export function ChatBubble() {
               aria-label="Envoyer un message"
             >
               <input
+                ref={inputRef}
                 placeholder="Posez votre question…"
                 value={input}
                 onChange={e => setInput(e.target.value)}

@@ -52,6 +52,9 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-cciama-uploads}
+      # Assistant IA (Groq) — optionnel : sans clé, l'assistant renvoie 503, le reste tourne
+      GROQ_API_SECRET: ${GROQ_API_SECRET:-}
+      GROQ_MODEL_NAME: ${GROQ_MODEL_NAME:-llama-3.3-70b-versatile}
     depends_on:
       postgres:
         condition: service_healthy
