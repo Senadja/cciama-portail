@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 import { usePlatformSettings } from './useCms';
+import { API_BASE } from '@/lib/api';
 
 export function useSse() {
   const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ export function useSse() {
 
   useEffect(() => {
     // Determine the SSE URL
-    const sseUrl = 'http://localhost:3000/api/v1/content/sse';
+    const sseUrl = `${API_BASE}/content/sse`;
     const eventSource = new EventSource(sseUrl);
 
     eventSource.onmessage = (event) => {
