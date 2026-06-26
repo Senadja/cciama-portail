@@ -111,7 +111,13 @@ export class MediaService {
     if (!media) {
       throw new NotFoundException(`Media asset with ID ${id} not found`);
     }
-    // Bucket is public-read → permanent direct URL (no expiry)
+    // En prod, le navigateur ne peut pas joindre MinIO interne : on sert le fichier
+    // via le backend (MEDIA_PUBLIC_BASE, ex. "/api/v1/content/media/file").
+    // Sinon (dev local), URL directe MinIO public-read (rétro-compatible).
+    const publicBase = this.configService.get<string>('MEDIA_PUBLIC_BASE');
+    if (publicBase) {
+      return `${publicBase}/${media.id}`;
+    }
     return this.minioService.getPublicUrl(media.path);
   }
 
