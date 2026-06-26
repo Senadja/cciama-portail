@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LayoutGrid, Home, Newspaper, FileText, FolderKanban, Building2, Settings, Users, Zap, Image, Activity, Search, Sliders } from 'lucide-react';
+import { LayoutGrid, Home, Newspaper, FileText, FolderKanban, Building2, Settings, Users, Zap, Image, Activity, Search, Sliders, KeyRound } from 'lucide-react';
 import { WorkspaceLayout } from '@/layouts/WorkspaceLayout';
 
 import { AdminHomeEditor } from './views/AdminHomeEditor';
@@ -9,6 +9,7 @@ import { AdminOrganigram } from './views/AdminOrganigram';
 import { AdminServicesEditor } from './views/AdminServicesEditor';
 import { AdminSettings } from './views/AdminSettings';
 import { AdminMediaLibrary } from './views/AdminMediaLibrary';
+import { AdminPassword } from './views/AdminPassword';
 import { CollectionEditor } from './views/CollectionEditor';
 import { newsConfig, documentsConfig, projectsConfig, organismsConfig, flashConfig, quickActionsConfig } from './views/collectionConfigs';
 
@@ -38,6 +39,7 @@ export function AdminPage() {
       { id: 'roles',    icon: <Users size={16} />,    label: 'Rôles & permissions' },
       { id: 'logs',     icon: <Activity size={16} />, label: "Journal d'activité" },
       { id: 'settings', icon: <Settings size={16} />, label: 'Paramètres généraux' },
+      { id: 'password', icon: <KeyRound size={16} />, label: 'Mot de passe' },
     ]},
   ];
 
@@ -64,6 +66,7 @@ export function AdminPage() {
       {view === 'quick'     && <CollectionEditor config={quickActionsConfig} />}
       {view === 'settings'  && <AdminSettings />}
       {view === 'media'     && <AdminMediaLibrary />}
+      {view === 'password'  && <AdminPassword />}
       {['users','roles','logs'].includes(view) && (
         <AdminGenericPlaceholder view={view} />
       )}

@@ -1,5 +1,6 @@
 import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { ChangePasswordDto } from './auth.dto';
 import { Unprotected } from 'nest-keycloak-connect';
 
 @Controller('auth')
@@ -18,5 +19,15 @@ export class AuthController {
       throw new UnauthorizedException('Invalid credentials');
     }
     return this.authService.login(user);
+  }
+
+  @Post('change-password')
+  @Unprotected()
+  async changePassword(@Body() dto: ChangePasswordDto) {
+    return this.authService.changePassword(
+      dto.email,
+      dto.currentPassword,
+      dto.newPassword,
+    );
   }
 }

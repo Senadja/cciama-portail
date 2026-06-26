@@ -59,4 +59,18 @@ export class AuthService implements OnModuleInit {
       }
     };
   }
+
+  /** Re-vérifie le mot de passe actuel avant de définir le nouveau (re-auth). */
+  async changePassword(email: string, currentPassword: string, newPassword: string) {
+    const user = await this.validateUser(email, currentPassword);
+    if (!user) {
+      throw new UnauthorizedException('Mot de passe actuel incorrect.');
+    }
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { passwordHash },
+    });
+    return { success: true };
+  }
 }
