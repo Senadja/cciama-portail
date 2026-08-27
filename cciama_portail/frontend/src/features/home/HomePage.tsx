@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Marquee } from '@/components/Marquee';
 import { useHomeContent, usePlatformSettings, useNews, useOrganisms, useServiceCatalogue } from '@/hooks/useCms';
+import { publicFamilies } from '@/lib/api';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
@@ -15,10 +16,9 @@ export function HomePage() {
   // appels d'offres -> /appels-offres).
   const NEWS = (newsData ?? []).filter(n => n.cat !== 'decret' && n.cat !== 'appel');
   const { data: orgData } = useOrganisms();
-  const ORGANISMS = (orgData ?? []).filter(o => o.kind === 'organism');
   const PARTNERS = (orgData ?? []).filter(o => o.kind === 'partner');
   const { data: catalogue } = useServiceCatalogue();
-  const previewServices = (catalogue ?? []).flatMap(f => f.services ?? []).slice(0, 3);
+  const previewServices = publicFamilies(catalogue).flatMap(f => f.services ?? []).slice(0, 3);
 
   const heroEyebrow = home?.heroEyebrow || "Chambre de Commerce, d'Industrie, d'Agriculture, des Mines et de l'Artisanat du Tchad";
   const heroTitle = home?.heroTitle || "La voix institutionnelle du secteur privé tchadien.";
@@ -171,13 +171,6 @@ export function HomePage() {
       </section>
 
       {/* Marquees */}
-      <Marquee
-        items={ORGANISMS}
-        speed={marqueeSpeed}
-        eyebrow="Écosystème institutionnel"
-        label="Organismes et structures sous tutelle"
-        viewAllPath="/institution/organismes"
-      />
       <Marquee
         items={PARTNERS}
         speed={marqueeSpeed + 10}

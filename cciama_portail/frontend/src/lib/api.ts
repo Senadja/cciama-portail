@@ -140,6 +140,18 @@ export interface CatalogueService {
   family?: ServiceFamily;
 }
 
+/**
+ * Familles du catalogue reservees a l'interne : la F5 « SI interne et gestion »
+ * regroupe des modules du systeme d'information (workflow, GED, SIRH, module
+ * financier), pas des services aux entreprises. Elles sont masquees des
+ * surfaces publiques mais restent editables dans la console d'administration.
+ */
+export const INTERNAL_FAMILY_CODES = ['F5'];
+
+export function publicFamilies(families: ServiceFamily[] | undefined): ServiceFamily[] {
+  return (families ?? []).filter(f => !INTERNAL_FAMILY_CODES.includes(f.code));
+}
+
 export interface ServiceFamily {
   id: string;
   code: string;

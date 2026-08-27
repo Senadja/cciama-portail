@@ -18,7 +18,7 @@ import { HomePage } from '@/features/home/HomePage';
 import { NewsListPage, ArticlePage } from '@/features/news/NewsPages';
 import { TrackerPage } from '@/features/tracker/TrackerPage';
 import { DocumentationPage } from '@/features/documentation/DocumentationPage';
-import { MotMinistrePage, MissionsPage, StructurePage, OrganismesPage, ProjetsPage, ContactPage } from '@/features/institution/InstitutionPages';
+import { MotMinistrePage, MissionsPage, StructurePage, ProjetsPage, ContactPage } from '@/features/institution/InstitutionPages';
 import { ServicesPage, ServiceDetailPage } from '@/features/services/ServicesCatalog';
 import { NotFoundPage } from '@/features/notfound/NotFoundPage';
 import { AppelsOffresPage } from '@/features/appels/AppelsOffresPage';
@@ -109,7 +109,6 @@ export default function App() {
               <Route path="institution/mot-du-ministre"     element={<MotMinistrePage />} />
               <Route path="institution/missions"            element={<MissionsPage />} />
               <Route path="institution/structure"           element={<StructurePage />} />
-              <Route path="institution/organismes"          element={<OrganismesPage />} />
               <Route path="institution/projets"             element={<Navigate to="/projets" replace />} />
               {/* 404 fallback */}
               <Route path="*"                               element={<NotFoundPage />} />

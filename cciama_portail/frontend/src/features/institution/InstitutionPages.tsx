@@ -2,9 +2,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ExternalLink, MapPin, Phone, Mail, Clock, Download } from 'lucide-react';
-import { LogoMark } from '@/components/icons/LogoMark';
-import { useMinisterContent, useMissions, useOrganigram, useProjects, useOrganisms } from '@/hooks/useCms';
+import { ArrowRight, MapPin, Phone, Mail, Clock, Download } from 'lucide-react';
+import { useMinisterContent, useMissions, useOrganigram, useProjects } from '@/hooks/useCms';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.08 } } };
@@ -169,30 +168,6 @@ export function StructurePage() {
             ))}
           </ul>
         </div>
-      </div>
-    </>
-  );
-}
-
-export function OrganismesPage() {
-  const { data: orgData } = useOrganisms();
-  const ORGANISMS = (orgData ?? []).filter(o => o.kind === 'organism');
-  return (
-    <>
-      <PageBanner title="Organismes et Structures sous tutelle" />
-      <div className="container" style={{ padding: '48px 28px 80px' }}>
-        <motion.div className="org-cards-grid" initial="hidden" animate="visible" variants={stagger}>
-          {ORGANISMS.map(o => (
-            <motion.a key={o.short} href={o.url} className="org-card-link" variants={fadeUp}>
-              <div className="org-mark"><LogoMark type={o.mark} color={o.color} size={48} /></div>
-              <div className="org-card-body">
-                <div className="org-short">{o.short}</div>
-                <div className="org-name-full">{o.name}</div>
-              </div>
-              <ExternalLink size={14} className="org-arrow" />
-            </motion.a>
-          ))}
-        </motion.div>
       </div>
     </>
   );

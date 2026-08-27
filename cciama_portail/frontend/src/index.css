@@ -1849,29 +1849,7 @@
 .org-node-leaf { min-width: 160px; padding: 16px 20px; }
 
 /* Organisme cards */
-.org-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-.org-card-link {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px 24px;
-  background: var(--color-paper);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-lg);
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.org-card-link:hover { border-color: var(--color-navy); box-shadow: var(--shadow-sm); }
-.org-mark { width: 48px; height: 48px; flex-shrink: 0; }
-.org-mark svg { width: 48px; height: 48px; }
 .org-card-body { flex: 1; }
-.org-short { font-family: var(--font-serif); font-size: var(--text-base); font-weight: 700; color: var(--color-navy); }
-.org-name-full { font-size: var(--text-xs); color: var(--color-ink-mute); margin-top: 2px; }
-.org-arrow { color: var(--color-ink-mute); opacity: 0; transition: opacity 0.15s; }
-.org-card-link:hover .org-arrow { opacity: 1; }
 
 /* Project cards */
 .projects-grid {
@@ -2558,7 +2536,6 @@
   .doc-row { padding: 16px 20px; gap: 16px; }
   .org-node { padding: 16px 22px; }
   .project-card { padding: 22px; }
-  .org-card-link { padding: 16px 20px; }
   .news-card .body { padding: 20px 20px 20px 0; }
   .news-list { gap: 24px; }
   .mot-grid { gap: 32px; }
@@ -2571,7 +2548,6 @@
 @media (max-width: 1100px) {
   .ref-col, .size-col { display: none; }
   .doc-row { grid-template-columns: 100px 1fr 120px 120px; }
-  .org-cards-grid { grid-template-columns: repeat(2, 1fr); }
   .org-tier-3 { grid-template-columns: repeat(2, 1fr); }
   .mot-card { grid-template-columns: 1fr !important; }
   .projects-grid { grid-template-columns: repeat(2, 1fr); }
@@ -2592,7 +2568,6 @@
   .tr-meta { grid-template-columns: repeat(2, 1fr); }
   /* Custom Grids */
   .projects-grid { grid-template-columns: 1fr; }
-  .org-cards-grid { grid-template-columns: 1fr; }
   .doc-row { grid-template-columns: 80px 1fr auto; }
   .page-banner { padding: 20px 0; }
   .page-banner h1 { font-size: clamp(24px, 4vw, 32px); }
@@ -2627,7 +2602,6 @@
   .ci-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .qservices-grid { grid-template-columns: repeat(2, 1fr); }
   .svc-grid { grid-template-columns: 1fr; }
-  .org-cards-grid { grid-template-columns: 1fr; }
   .projects-grid { grid-template-columns: 1fr; }
   .org-tier { flex-direction: column; align-items: center; }
   .org-node { min-width: unset; width: 100%; max-width: 280px; }

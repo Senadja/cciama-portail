@@ -117,7 +117,6 @@ export const NAV_ITEMS = [
     { id: 'institution-mot', label: "Mot de l'Administrateur Provisoire", path: '/institution/mot-du-ministre' },
     { id: 'institution-missions', label: "Missions et Attributions", path: '/institution/missions' },
     { id: 'institution-structure', label: "Structure Organisationnelle", path: '/institution/structure' },
-    { id: 'institution-organismes', label: "Organismes et Structures sous tutelle", path: '/institution/organismes' },
   ]},
   { id: 'services', label: 'Services', path: '/services' },
   { id: 'actualites', label: 'Actualités', path: '/actualites' },

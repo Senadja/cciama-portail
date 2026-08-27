@@ -5,6 +5,7 @@ import { useLangStore } from '@/stores/useLangStore';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { NAV_ITEMS, LANGS } from '@/data';
 import { usePlatformSettings, useServiceCatalogue } from '@/hooks/useCms';
+import { publicFamilies } from '@/lib/api';
 
 export function GovHeader() {
   const location = useLocation();
@@ -189,7 +190,7 @@ function ServicesNavDropdown({ label, isActive, isOpen, onToggle, onClose }: {
 }) {
   const ref = useClickOutside<HTMLDivElement>(onClose);
   const { data: catalogue } = useServiceCatalogue();
-  const families = catalogue ?? [];
+  const families = publicFamilies(catalogue);
 
   return (
     <div className={`nav-item ${isOpen ? 'open' : ''}`} ref={ref}>
@@ -406,7 +407,6 @@ export function GovFooter() {
             <ul>
               <li><Link to="/institution/missions">Missions</Link></li>
               <li><Link to="/institution/structure">Gouvernance</Link></li>
-              <li><Link to="/institution/organismes">Délégations</Link></li>
               <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>

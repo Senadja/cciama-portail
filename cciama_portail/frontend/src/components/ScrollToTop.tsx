@@ -10,7 +10,6 @@ const PAGE_TITLES: Record<string, string> = {
   '/contact':                       'Contact — CCIAMA',
   '/institution/missions':          'Missions — CCIAMA',
   '/institution/structure':         'Gouvernance — CCIAMA',
-  '/institution/organismes':        'Délégations régionales — CCIAMA',
   '/institution/projets':           'Projets & programmes — CCIAMA',
   '/institution/mot-du-ministre':   'Mot du Président — CCIAMA',
   '/admin':                         'Console d\'administration — CCIAMA',
