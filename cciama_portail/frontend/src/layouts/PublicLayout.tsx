@@ -397,7 +397,6 @@ export function GovFooter() {
             <h4>Services</h4>
             <ul>
               <li><Link to="/services">Formalités des entreprises</Link></li>
-              <li><Link to="/tracker">Suivre mon dossier</Link></li>
               <li><Link to="/documentation">Documentation officielle</Link></li>
               <li><Link to="/actualites">Actualités</Link></li>
             </ul>
