@@ -36,7 +36,7 @@ export function WorkspaceLayout({ children, role, accent, sections, current, onN
   const ac = accentColors[accent];
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#F4F2EB' }}>
+    <div id="workspace-root" style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#F4F2EB' }}>
       {/* Sidebar */}
       <aside style={{
         width: collapsed ? 64 : 260,

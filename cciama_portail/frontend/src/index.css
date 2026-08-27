@@ -49,13 +49,19 @@
   --radius-lg: 8px;
 
   /* Container */
-  --container-max: 1320px;
+  --container-max: 1560px;
 }
 
 /* ============================================================
    Base Styles
    ============================================================ */
 @layer base {
+  /* Rythme visuel aligne sur le portail CCA-PPP : zoom global 0,75 avec un
+     conteneur elargi a 1560px, ce qui ramene la colonne de contenu a 1170px
+     de rendu, comme la reference. Les espaces internes gardent leur echelle. */
+  :root { zoom: 0.75; }
+  html:has(#workspace-root) { zoom: 1 !important; }
+
   html, body {
     margin: 0;
     padding: 0;
@@ -76,17 +82,14 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
+    /* Filigrane d'armoirie retire : seule la trame diagonale subsiste. */
     background-image:
-      url('/cciama-logo.png'),
       repeating-linear-gradient(135deg,
         rgba(14, 42, 94, 0.018) 0 28px,
         transparent 28px 56px),
       repeating-linear-gradient(45deg,
         rgba(200, 150, 30, 0.012) 0 34px,
         transparent 34px 68px);
-    background-repeat: no-repeat, repeat, repeat;
-    background-position: center center, 0 0, 0 0;
-    background-size: min(620px, 60vw) auto, auto, auto;
     opacity: 0.07;
   }
   body > * { position: relative; z-index: 1; }
@@ -934,9 +937,9 @@
 }
 .hero-feature .feature-watermark {
   position: absolute;
-  right: -40px;
-  top: -30px;
-  width: 320px;
+  right: 24px;
+  top: 24px;
+  width: 170px;
   opacity: 0.08;
   filter: brightness(2);
 }
