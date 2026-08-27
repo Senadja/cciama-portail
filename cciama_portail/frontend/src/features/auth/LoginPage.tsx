@@ -5,8 +5,7 @@ import { useAuthStore } from '@/stores/useAuthStore';
 import { usePlatformSettings } from '@/hooks/useCms';
 import { Lock, Mail, ArrowRight, Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
+import { API_BASE } from '@/lib/api';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -26,7 +25,7 @@ export function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, { email, password });
+      const response = await axios.post(`${API_BASE}/auth/login`, { email, password });
       if (response.data.access_token) {
         login(response.data.user, response.data.access_token);
         navigate('/admin');

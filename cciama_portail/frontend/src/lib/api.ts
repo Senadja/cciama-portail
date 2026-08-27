@@ -2,7 +2,12 @@
  * API Client for CCIAMA Portal CMS & Media Services
  */
 
-export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
+// VITE_API_URL prime si elle est definie (image Docker, autre hebergeur).
+// Sinon : serveur de dev local, ou chemin relatif en build de prod — le
+// rewrite de vercel.json proxifie /api/v1/* vers le backend, en same-origin.
+export const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? 'http://localhost:3000/api/v1' : '/api/v1');
 
 export interface PlatformSettingsDict {
   logo: string;
