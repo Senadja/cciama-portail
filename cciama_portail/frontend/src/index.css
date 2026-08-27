@@ -1126,35 +1126,9 @@
   line-height: 1.45;
 }
 
-/* Mission / stats */
-.mission {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 0;
-  background: var(--color-paper);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.mission-left {
-  background: var(--color-navy);
-  color: white;
-  padding: 48px 44px;
-  position: relative;
-  overflow: hidden;
-}
-.mission-left::before {
-  content: "";
-  position: absolute;
-  right: -60px; bottom: -60px;
-  width: 280px; height: 280px;
-  background-image: url('/cciama-logo.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  opacity: 0.08;
-}
+/* Chiffres cles */
 .eyebrow {
-  color: var(--color-cream);
+  color: var(--color-red);
   font-size: var(--text-xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -1168,30 +1142,21 @@
   content: "";
   width: 24px;
   height: 2px;
-  background: var(--color-cream);
+  background: var(--color-gold);
 }
-.mission-left h3 {
-  font-size: var(--text-xl);
-  color: white;
-  margin-bottom: 20px;
-  line-height: 1.15;
-}
-.mission-left p {
-  font-size: var(--text-base);
-  line-height: 1.65;
-  color: rgba(255,255,255,0.85);
-  margin: 0;
-  text-align: justify;
-  hyphens: auto;
-}
-.mission-right {
-  padding: 48px 44px;
+.keyfigures-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px 28px;
-  align-content: center;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
-.mission-stat .num {
+.keyfigure {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-top: 3px solid var(--color-gold);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+}
+.keyfigure .num {
   font-family: var(--font-serif);
   font-size: 46px;
   font-weight: 600;
@@ -1200,13 +1165,13 @@
   margin-bottom: 6px;
   letter-spacing: -0.02em;
 }
-.mission-stat .num sup { color: var(--color-gold); font-size: 22px; margin-left: 4px; }
-.mission-stat .lbl {
+.keyfigure .num sup { color: var(--color-gold); font-size: 22px; margin-left: 4px; }
+.keyfigure .lbl {
   font-size: var(--text-sm);
   color: var(--color-ink-soft);
   font-weight: 600;
 }
-.mission-stat .desc {
+.keyfigure .desc {
   font-size: var(--text-xs);
   color: var(--color-ink-mute);
   margin-top: 4px;
@@ -1552,7 +1517,7 @@
 
 .news-list {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr;
   gap: 32px;
 }
 .news-list .main { display: flex; flex-direction: column; gap: 20px; }
@@ -2581,21 +2546,22 @@
     font-size: 11px;
   }
 
-  .mission-left {
-    padding: 36px 32px;
-  }
-  .mission-left h3 {
-    font-size: var(--text-xl);
-    margin-bottom: 12px;
-  }
-  .mission-right {
-    padding: 36px 32px;
-    gap: 20px 24px;
-  }
-  .mission-stat .num {
+  .keyfigures-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.keyfigure {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-top: 3px solid var(--color-gold);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+}
+.keyfigure .num {
     font-size: 38px;
   }
-  .mission-stat .num sup {
+  .keyfigure .num sup {
     font-size: 18px;
   }
 
@@ -2645,7 +2611,7 @@
   .project-card { padding: 22px; }
   .org-card-link { padding: 16px 20px; }
   .news-card .body { padding: 20px 20px 20px 0; }
-  .news-list { grid-template-columns: 1fr 300px; gap: 24px; }
+  .news-list { gap: 24px; }
   .mot-grid { gap: 32px; }
   .cta-banners-grid { margin-top: 28px; margin-bottom: 60px; }
 }
@@ -2667,9 +2633,8 @@
   .hero-feature { min-height: 400px; }
   .hero-feature h1 { font-size: clamp(28px, 5vw, 40px); }
   .qservices-grid { grid-template-columns: repeat(2, 1fr); }
-  .mission { grid-template-columns: 1fr; }
+  .keyfigures-grid { grid-template-columns: repeat(2, 1fr); }
   .svc-grid { grid-template-columns: repeat(2, 1fr); }
-  .news-list { grid-template-columns: 1fr; }
   .article-wrap { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
   .footer-info-grid { grid-template-columns: repeat(2, 1fr); }
@@ -2782,3 +2747,154 @@
 .skiptranslate iframe { display: none !important; }
 body { top: 0 !important; }
 font.goog-text-highlight { background: none !important; box-shadow: none !important; }
+
+/* ============================================================
+   Mediatheque
+   ============================================================ */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.media-tile {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.media-tile:hover { border-color: var(--color-navy); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.media-tile:focus-visible { outline: 3px solid var(--color-gold); outline-offset: 2px; }
+.media-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, var(--color-navy-soft), var(--color-navy));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.media-thumb img, .media-thumb video { width: 100%; height: 100%; object-fit: cover; }
+.media-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14, 42, 94, 0.35);
+  color: white;
+}
+.media-kind {
+  position: absolute;
+  top: 10px; left: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(14, 42, 94, 0.82);
+  color: white;
+}
+.media-caption {
+  padding: 14px 16px;
+  border-top: 1px solid var(--color-rule-soft);
+}
+.media-caption .t {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.media-caption .d {
+  font-size: var(--text-xs);
+  color: var(--color-ink-mute);
+  margin-top: 4px;
+}
+
+/* Visionneuse */
+.media-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(8, 26, 61, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+.media-lightbox-inner {
+  max-width: min(1100px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.media-lightbox img, .media-lightbox video {
+  max-width: 100%;
+  max-height: calc(100dvh - 160px);
+  width: auto;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  background: black;
+}
+.media-lightbox-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: rgba(255,255,255,0.85);
+  font-size: var(--text-sm);
+}
+.media-lightbox-close {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  border-radius: 100px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.media-lightbox-close:hover { background: rgba(255,255,255,0.2); }
+
+@media (max-width: 1100px) {
+  .media-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .media-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .media-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   Navigation principale : avec 8 onglets, la barre ne tient plus
+   sur une ligne sous ~1100px -> bascule sur le menu burger.
+   ============================================================ */
+@media (max-width: 1400px) {
+  .gov-nav a { padding: 12px 12px; }
+}
+@media (max-width: 1100px) {
+  .mobile-toggle { display: flex; }
+  .mobile-toggle span { display: none; }
+  .gov-nav:not(.open) { display: none; }
+  .gov-nav .container { flex-direction: column; padding-top: 8px; padding-bottom: 8px; gap: 0; }
+  .gov-nav a { padding: 14px 0; border-bottom: 1px solid var(--color-rule-soft) !important; width: 100%; }
+  .gov-nav a:last-child { border-bottom: 0 !important; }
+  .nav-utility { display: none; }
+  .gov-dropdown {
+    position: static; box-shadow: none; border: 0;
+    background: var(--color-cream-warm); padding: 0;
+    margin: 0 0 8px; border-radius: var(--radius-lg);
+    display: none;
+  }
+  .nav-item.open .gov-dropdown { display: block; }
+  .gov-dropdown-services { min-width: 0; padding: 0; }
+}

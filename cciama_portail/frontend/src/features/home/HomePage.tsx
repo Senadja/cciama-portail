@@ -11,7 +11,9 @@ export function HomePage() {
   const { data: home } = useHomeContent();
   const { data: settings } = usePlatformSettings();
   const { data: newsData } = useNews();
-  const NEWS = newsData ?? [];
+  // Meme perimetre que la page /actualites (decrets -> Documentation,
+  // appels d'offres -> /appels-offres).
+  const NEWS = (newsData ?? []).filter(n => n.cat !== 'decret' && n.cat !== 'appel');
   const { data: orgData } = useOrganisms();
   const ORGANISMS = (orgData ?? []).filter(o => o.kind === 'organism');
   const PARTNERS = (orgData ?? []).filter(o => o.kind === 'partner');
@@ -24,10 +26,8 @@ export function HomePage() {
   const heroCtaText = home?.heroCtaText || "Découvrir les services";
   const heroCtaLink = home?.heroCtaLink || "/services";
   const heroImage = home?.heroImage || "";
-  const missionEye = home?.missionEye || "Notre mission";
-  const missionTitle = home?.missionTitle || "Représenter, Défendre et Accompagner";
-  const missionDesc = home?.missionDesc || "La CCIAMA a pour mission de représenter et défendre les intérêts du secteur privé, servir d’interface avec l’État, et contribuer à l’amélioration du climat des affaires. Nous accompagnons le développement du commerce, de l'agriculture, de l'artisanat et de l'industrie.";
-  const stats = home?.stats || [
+  // `||` ne se replie pas ici : un tableau vide est truthy (stats = [] en base).
+  const stats = home?.stats?.length ? home.stats : [
     { num: '23', sup: '', label: 'Délégations en province' },
     { num: '86', sup: '', label: "Membres élus (N'Djamena)" },
     { num: '5', sup: '', label: "Secteurs d'activité" },
@@ -113,33 +113,30 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Mission & Stats */}
-      <section className="container">
-        <motion.div
-          className="mission"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={stagger}
-        >
-          <div className="mission-left">
-            <motion.div className="eyebrow" variants={fadeUp}>{missionEye}</motion.div>
-            <motion.h3 variants={fadeUp}>
-              {missionTitle}
-            </motion.h3>
-            <motion.p variants={fadeUp} className="justify">
-              {missionDesc}
-            </motion.p>
+      {/* Chiffres clés */}
+      <section className="section" aria-label="Chiffres clés">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <div className="eyebrow">La CCIAMA en bref</div>
+              <h2>Chiffres clés</h2>
+            </div>
           </div>
-          <motion.div className="mission-right" variants={stagger}>
+          <motion.div
+            className="keyfigures-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={stagger}
+          >
             {stats.map((s, i) => (
-              <motion.div key={i} className="mission-stat" variants={fadeUp}>
+              <motion.div key={i} className="keyfigure" variants={fadeUp}>
                 <div className="num">{s.num}<sup>{s.sup}</sup></div>
                 <div className="lbl">{s.label}</div>
               </motion.div>
             ))}
           </motion.div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Services Preview */}

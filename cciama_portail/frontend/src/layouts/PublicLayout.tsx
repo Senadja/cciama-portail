@@ -107,7 +107,7 @@ export function GovHeader({ onGoTo }: { onGoTo: (route: string) => void }) {
                   isActive={location.pathname.startsWith('/services')}
                   isOpen={openDropdown === item.id}
                   onToggle={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
-                  onClose={() => setOpenDropdown(null)}
+                  onClose={() => setOpenDropdown(cur => (cur === item.id ? null : cur))}
                 />
               );
             }
@@ -119,7 +119,7 @@ export function GovHeader({ onGoTo }: { onGoTo: (route: string) => void }) {
                   isActive={getActive(item.id)}
                   isOpen={openDropdown === item.id}
                   onToggle={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
-                  onClose={() => setOpenDropdown(null)}
+                  onClose={() => setOpenDropdown(cur => (cur === item.id ? null : cur))}
                 />
               );
             }
@@ -459,7 +459,7 @@ export function GovFooter() {
               <li><Link to="/services">Formalités des entreprises</Link></li>
               <li><Link to="/tracker">Suivre mon dossier</Link></li>
               <li><Link to="/documentation">Documentation officielle</Link></li>
-              <li><Link to="/actualites">Actualités et Événements</Link></li>
+              <li><Link to="/actualites">Actualités</Link></li>
             </ul>
           </div>
           <div className="footer-col">

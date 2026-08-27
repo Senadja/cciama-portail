@@ -9,7 +9,6 @@ import { useLangStore } from '@/stores/useLangStore';
 // Layouts & shell components
 import { GovHeader, GovFooter } from '@/layouts/PublicLayout';
 import { FlashInfoBand } from '@/features/flash/FlashInfoBand';
-import { ChatBubble } from '@/features/chat/ChatBubble';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { useSse } from '@/hooks/useSse';
 import { ContentUpdateModal } from '@/components/ContentUpdateModal';
@@ -22,6 +21,8 @@ import { DocumentationPage } from '@/features/documentation/DocumentationPage';
 import { MotMinistrePage, MissionsPage, StructurePage, OrganismesPage, ProjetsPage, ContactPage } from '@/features/institution/InstitutionPages';
 import { ServicesPage, ServiceDetailPage } from '@/features/services/ServicesCatalog';
 import { NotFoundPage } from '@/features/notfound/NotFoundPage';
+import { AppelsOffresPage } from '@/features/appels/AppelsOffresPage';
+import { MediathequePage } from '@/features/mediatheque/MediathequePage';
 
 // Workspaces (internal — lazy-loaded)
 const AdminPage = lazy(() => import('@/features/admin/AdminPage').then(m => ({ default: m.AdminPage })));
@@ -69,7 +70,6 @@ function PublicLayout() {
       </main>
       <GovFooter />
       <FlashInfoBand />
-      <ChatBubble />
       <ContentUpdateModal isOpen={modalOpen} progress={progress} reason={updateReason} />
     </>
   );
@@ -98,6 +98,9 @@ export default function App() {
               <Route path="services/:code"                  element={<ServiceDetailPage />} />
               <Route path="actualites"                      element={<NewsListPage />} />
               <Route path="actualites/:id"                  element={<ArticlePage />} />
+              <Route path="appels-offres"                   element={<AppelsOffresPage />} />
+              <Route path="projets"                         element={<ProjetsPage />} />
+              <Route path="mediatheque"                     element={<MediathequePage />} />
               <Route path="documentation"                   element={<DocumentationPage />} />
               <Route path="tracker"                         element={<TrackerPage />} />
               <Route path="contact"                         element={<ContactPage />} />
@@ -108,7 +111,7 @@ export default function App() {
               <Route path="institution/missions"            element={<MissionsPage />} />
               <Route path="institution/structure"           element={<StructurePage />} />
               <Route path="institution/organismes"          element={<OrganismesPage />} />
-              <Route path="institution/projets"             element={<ProjetsPage />} />
+              <Route path="institution/projets"             element={<Navigate to="/projets" replace />} />
               {/* 404 fallback */}
               <Route path="*"                               element={<NotFoundPage />} />
             </Route>

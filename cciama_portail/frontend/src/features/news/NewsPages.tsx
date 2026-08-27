@@ -9,7 +9,9 @@ const stagger = { visible: { transition: { staggerChildren: 0.08 } } };
 
 export function NewsListPage() {
   const { data: newsData } = useNews();
-  const NEWS = newsData ?? [];
+  // Les décrets sont publiés dans « Documentation » et les appels d'offres ont
+  // leur propre page : ils ne remontent pas dans le fil d'actualités.
+  const NEWS = (newsData ?? []).filter(n => n.cat !== 'decret' && n.cat !== 'appel');
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
 
@@ -17,8 +19,6 @@ export function NewsListPage() {
     { id: 'all', label: 'Toutes' },
     { id: 'communique', label: 'Communiqués' },
     { id: 'evenement', label: 'Événements' },
-    { id: 'decret', label: 'Décrets & lois' },
-    { id: 'appel', label: "Appels d'offres" },
   ];
 
   const filtered = NEWS.filter(n => {
@@ -39,7 +39,7 @@ export function NewsListPage() {
     <>
       <div className="page-banner">
         <div className="container">
-          <h1>Actualités & Événements</h1>
+          <h1>Actualités</h1>
         </div>
       </div>
 
@@ -132,54 +132,6 @@ export function NewsListPage() {
             ))}
           </motion.div>
 
-          <aside className="side">
-            <div className="side-card dark">
-              <h3>À la une cette semaine</h3>
-              <ul>
-                {NEWS.slice(0, 4).map((n, i) => (
-                  <li key={n.id}>
-                    <div className="num">0{i + 1}</div>
-                    <Link to={`/actualites/${n.id}`} className="t">{n.title}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="side-card">
-              <h3>Abonnez-vous</h3>
-              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-soft)', margin: '0 0 14px', lineHeight: 1.55 }}>
-                Recevez chaque vendredi la sélection officielle des communications de la semaine.
-              </p>
-              <input
-                type="email"
-                placeholder="votre@email.td"
-                style={{
-                  width: '100%', padding: '12px 14px',
-                  border: '1px solid var(--color-rule)', borderRadius: 4,
-                  marginBottom: 10, font: 'inherit', fontSize: 'var(--text-sm)',
-                  background: 'var(--color-cream)', color: 'var(--color-ink)',
-                }}
-                aria-label="Adresse e-mail pour l'abonnement"
-              />
-              <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                Je m'abonne
-              </button>
-            </div>
-
-            <div className="side-card">
-              <h3>Archives</h3>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {['Mai 2026 (6)', 'Avril 2026 (8)', 'Mars 2026 (12)', 'Février 2026 (9)'].map(a => (
-                  <li key={a} style={{
-                    padding: '10px 0', borderBottom: '1px solid var(--color-rule-soft)',
-                    fontSize: 'var(--text-sm)', cursor: 'pointer', color: 'var(--color-ink-soft)',
-                  }}>
-                    {a}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </aside>
         </div>
       </div>
     </>

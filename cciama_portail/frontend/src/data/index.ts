@@ -118,10 +118,12 @@ export const NAV_ITEMS = [
     { id: 'institution-missions', label: "Missions et Attributions", path: '/institution/missions' },
     { id: 'institution-structure', label: "Structure Organisationnelle", path: '/institution/structure' },
     { id: 'institution-organismes', label: "Organismes et Structures sous tutelle", path: '/institution/organismes' },
-    { id: 'institution-projets', label: "Projets et Programmes", path: '/institution/projets' },
   ]},
   { id: 'services', label: 'Services', path: '/services' },
-  { id: 'actualites', label: 'Actualités & Événements', path: '/actualites' },
+  { id: 'actualites', label: 'Actualités', path: '/actualites' },
+  { id: 'appels', label: "Appels d'offres", path: '/appels-offres' },
+  { id: 'projets', label: 'Projets', path: '/projets' },
+  { id: 'mediatheque', label: 'Médiathèque', path: '/mediatheque' },
   { id: 'documentation', label: 'Documentation', path: '/documentation' },
 ];
 
