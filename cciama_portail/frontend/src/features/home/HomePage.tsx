@@ -35,7 +35,6 @@ export function HomePage() {
   ];
 
   const marqueeSpeed = settings?.marquee_speed || 40;
-  const logoUrl = settings?.logo || "/cciama-logo.png";
 
   return (
     <>
@@ -57,7 +56,6 @@ export function HomePage() {
                 {!heroImage && <div className="placeholder-stripe" />}
               </div>
               {!heroImage && <div className="img-tag">[ photo institutionnelle · espace à personnaliser ]</div>}
-              <img className="feature-watermark" src={logoUrl} alt="" />
               <div className="hero-feature-content">
                 <motion.div className="hero-eyebrow" variants={fadeUp}>
                   {heroEyebrow}

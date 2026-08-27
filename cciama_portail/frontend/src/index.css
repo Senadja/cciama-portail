@@ -935,14 +935,6 @@
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 2px;
 }
-.hero-feature .feature-watermark {
-  position: absolute;
-  right: 24px;
-  top: 24px;
-  width: 170px;
-  opacity: 0.08;
-  filter: brightness(2);
-}
 .hero-feature-content {
   position: relative;
   padding: 48px;
