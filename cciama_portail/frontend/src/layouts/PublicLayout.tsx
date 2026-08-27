@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, FileText, ChevronDown, Menu, X } from 'lucide-react';
+import { Search, ChevronDown, Menu, X } from 'lucide-react';
 import { useLangStore } from '@/stores/useLangStore';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { NAV_ITEMS, LANGS } from '@/data';
 import { usePlatformSettings, useServiceCatalogue } from '@/hooks/useCms';
 
-export function GovHeader({ onGoTo }: { onGoTo: (route: string) => void }) {
+export function GovHeader() {
   const location = useLocation();
   const [prevPath, setPrevPath] = useState(location.pathname);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -72,11 +72,6 @@ export function GovHeader({ onGoTo }: { onGoTo: (route: string) => void }) {
             />
           </label>
 
-          <Link to="/tracker" className="cta-suivre" aria-label="Suivre mon dossier">
-            <FileText size={18} />
-            <span className="lbl-full">Suivre mon dossier</span>
-          </Link>
-
           {/* Mobile hamburger */}
           <button
             className="mobile-toggle"
@@ -136,16 +131,9 @@ export function GovHeader({ onGoTo }: { onGoTo: (route: string) => void }) {
             );
           })}
 
-          <div className="mobile-only" style={{ padding: '16px 0', borderBottom: '1px solid var(--color-rule-soft)' }}>
-            <Link to="/tracker" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => setMobileOpen(false)}>
-              <FileText size={18} />
-              Suivre mon dossier
-            </Link>
-          </div>
-
           <div className="desktop-only" style={{ flex: 1 }} />
 
-          <NavUtility onGoTo={onGoTo} />
+          <NavUtility />
         </div>
       </nav>
     </header>
@@ -240,11 +228,9 @@ function ServicesNavDropdown({ label, isActive, isOpen, onToggle, onClose }: {
   );
 }
 
-function NavUtility({ onGoTo }: { onGoTo: (route: string) => void }) {
+function NavUtility() {
   return (
     <div className="nav-utility">
-      <InternalSpacesDropdown onGoTo={onGoTo} />
-      <div className="nav-utility-sep" aria-hidden="true" />
       <LangDropdown />
     </div>
   );
@@ -289,52 +275,6 @@ function LangDropdown() {
   );
 }
 
-
-function InternalSpacesDropdown({ onGoTo }: { onGoTo: (route: string) => void }) {
-  const [open, setOpen] = useState(false);
-  const ref = useClickOutside<HTMLDivElement>(useCallback(() => setOpen(false), []));
-
-  const spaces = [
-    { label: 'Administration', desc: 'Se connecter à la console', icon: 'A', color: '#0E2A5E', path: '/connexion' },
-    { label: 'Espace Agent', desc: 'Instruire les dossiers', icon: 'AG', color: '#1F5C1F', path: '/agent' },
-    { label: 'Tableau de bord décideurs', desc: 'Indicateurs & pilotage', icon: 'BI', color: '#7A5A0E', path: '/bi' },
-  ];
-
-  return (
-    <div className="nav-utility-item" ref={ref}>
-      <button
-        className="nav-utility-btn subtle"
-        onClick={() => setOpen(!open)}
-        aria-haspopup="true"
-        aria-expanded={open}
-        title="Accès agents et administrateurs"
-      >
-        Espace interne
-        <ChevronDown size={10} className="caret" />
-      </button>
-      {open && (
-        <div className="nav-utility-menu" style={{ minWidth: 320, right: 0, left: 'auto' }} role="menu">
-          {spaces.map(s => (
-            <div
-              key={s.path}
-              className="space-row"
-              onClick={() => { onGoTo(s.path); setOpen(false); }}
-              role="menuitem"
-              tabIndex={0}
-              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { onGoTo(s.path); setOpen(false); } }}
-            >
-              <span className="us-icon" style={{ background: s.color }}>{s.icon}</span>
-              <div>
-                <div className="us-name">{s.label}</div>
-                <div className="us-desc">{s.desc}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ===== Footer =====
 export function GovFooter() {

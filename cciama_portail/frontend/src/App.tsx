@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { queryClient } from '@/lib/queryClient';
@@ -47,14 +47,13 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function PublicLayout() {
-  const navigate = useNavigate();
   const location = useLocation();
   const { modalOpen, progress, updateReason } = useSse();
 
   return (
     <>
       <a href="#main-content" className="skip-link">Aller au contenu principal</a>
-      <GovHeader onGoTo={(path) => navigate(path)} />
+      <GovHeader />
       <main id="main-content">
         <AnimatePresence mode="wait">
           <motion.div
