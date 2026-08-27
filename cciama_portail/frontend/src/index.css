@@ -851,6 +851,12 @@
   inset: 0;
   background: linear-gradient(135deg, #1B3D7C 0%, #0E2A5E 60%, #081A3D 100%);
   overflow: hidden;
+  /* Le visuel d'accueil est un embleme carre, pas une photo panoramique :
+     `cover` l'agrandissait a 930x930 dans un cadre de 440 de haut et le
+     rognait. On l'affiche en entier, cale a droite, texte a gauche. */
+  background-size: auto 86%;
+  background-position: right 4% center;
+  background-repeat: no-repeat;
 }
 .hero-feature .feature-img::before,
 .hero-feature .feature-img::after {
@@ -866,10 +872,17 @@
   opacity: 0.6;
 }
 .hero-feature .feature-img::after {
-  background: linear-gradient(180deg,
-    rgba(8,26,61,0) 35%,
-    rgba(8,26,61,0.55) 65%,
-    rgba(8,26,61,0.92) 100%);
+  /* Voile lateral : le texte repose sur du bleu franc, l'embleme reste lisible
+     a droite. Le degrade vertical d'origine est conserve. */
+  background:
+    linear-gradient(90deg,
+      rgba(8,26,61,0.94) 0%,
+      rgba(8,26,61,0.88) 42%,
+      rgba(8,26,61,0.30) 100%),
+    linear-gradient(180deg,
+      rgba(8,26,61,0) 35%,
+      rgba(8,26,61,0.55) 65%,
+      rgba(8,26,61,0.92) 100%);
 }
 .hero-feature .placeholder-stripe {
   position: absolute;

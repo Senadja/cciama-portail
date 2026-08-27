@@ -51,7 +51,7 @@ export function HomePage() {
             >
               <div
                 className="feature-img"
-                style={heroImage ? { backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+                style={heroImage ? { backgroundImage: `url(${heroImage})` } : undefined}
               >
                 {!heroImage && <div className="placeholder-stripe" />}
               </div>
