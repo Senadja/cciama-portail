@@ -411,7 +411,11 @@
 }
 .header-top-container {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  /* Deux colonnes seulement : le burger, masque sur desktop, cree sa colonne
+     a la demande via grid-auto-flow. Sinon sa colonne vide et son gap
+     empechaient la recherche d'atteindre le bord droit. */
+  grid-template-columns: auto 1fr;
+  grid-auto-flow: column;
   align-items: center;
   gap: var(--header-gap, 28px);
 }
@@ -451,7 +455,8 @@
   padding: 0 14px;
   height: 44px;
   max-width: 440px;
-  margin: 0 auto;
+  /* Collee au bord droit de l'en-tete (l'ancien `margin: 0 auto` la centrait). */
+  margin: 0 0 0 auto;
   width: 100%;
 }
 .header-search input {
