@@ -1220,7 +1220,13 @@
   border-color: var(--color-navy);
   box-shadow: var(--shadow-sm);
 }
-.logo-mark { width: 40px; height: 40px; flex-shrink: 0; }
+.logo-mark { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; }
+/* Sans logo televerse : le sigle, dans une pastille aux couleurs du portail. */
+.logo-mark-fallback {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: var(--color-navy); color: white;
+  font-family: var(--font-serif); font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+}
 .logo-mark svg { width: 40px; height: 40px; }
 .logo-short { font-family: var(--font-serif); font-size: 14px; font-weight: 700; color: var(--color-navy); }
 .logo-name { font-size: 12px; color: var(--color-ink-mute); max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
@@ -1573,6 +1579,17 @@
 /* ============================================================
    Article
    ============================================================ */
+/* Galerie de l'article : les photos au-dela du visuel principal */
+.article-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 28px 0 8px;
+}
+.article-gallery a { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid var(--color-rule); }
+.article-gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s; }
+.article-gallery a:hover img { transform: scale(1.04); }
+
 .article-wrap {
   display: grid;
   grid-template-columns: 1fr 320px;
@@ -1865,6 +1882,19 @@
 .org-card-body { flex: 1; }
 
 /* Project cards */
+/* Filtre par année des projets */
+.period-filter {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: var(--text-sm); font-weight: 600; color: var(--color-ink-soft);
+}
+.period-filter select {
+  font: inherit; font-weight: 500; padding: 8px 12px;
+  border: 1px solid var(--color-rule); border-radius: var(--radius-sm);
+  background: var(--color-paper); color: var(--color-ink);
+}
+/* Adresses cliquables dans le résumé d'un document */
+.doc-title p a { color: var(--color-navy); text-decoration: underline; overflow-wrap: anywhere; }
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

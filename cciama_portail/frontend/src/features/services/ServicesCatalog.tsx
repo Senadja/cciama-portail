@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Clock, Users, Building2, FileText, RefreshCw } from 'lucide-react';
 import { useServiceCatalogue, useServiceByCode } from '@/hooks/useCms';
-import { publicFamilies } from '@/lib/api';
 import type { CatalogueService } from '@/lib/api';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
@@ -32,7 +31,7 @@ export function ServicesPage() {
   const { data: families, isLoading, isError } = useServiceCatalogue();
   const [activeFamily, setActiveFamily] = useState<string>('all');
 
-  const allFamilies = publicFamilies(families);
+  const allFamilies = families || [];
   const totalServices = allFamilies.reduce((acc, f) => acc + (f.services?.length || 0), 0);
   const visibleFamilies = activeFamily === 'all' ? allFamilies : allFamilies.filter(f => f.id === activeFamily);
 

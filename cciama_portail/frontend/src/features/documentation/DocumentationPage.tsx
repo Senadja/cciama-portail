@@ -1,6 +1,19 @@
 import { useState } from 'react';
 import { Search, Download, Eye, Printer } from 'lucide-react';
 import { useDocuments } from '@/hooks/useCms';
+import { DOCUMENT_TYPES, formatDate, labelOf } from '@/lib/format';
+
+// Une adresse s'arrête au premier espace ; la ponctuation finale reste au texte.
+const URL_PATTERN = /(https?:\/\/[^\s]*[^\s.,;:!?)])/g;
+
+/** Rend cliquables, là où elles apparaissent, les adresses collées dans le texte (vidéo YouTube, Facebook…). */
+function withLinks(text: string) {
+  return text.split(URL_PATTERN).map((part, i) =>
+    i % 2 === 1
+      ? <a key={i} href={part} target="_blank" rel="noopener noreferrer">{part}</a>
+      : part
+  );
+}
 
 export function DocumentationPage() {
   const { data: docsData } = useDocuments();
@@ -81,14 +94,14 @@ export function DocumentationPage() {
           {filtered.map(d => (
             <div key={d.id} className="doc-row" role="row">
               <div role="cell">
-                <span className={`doc-type-pill ${d.type}`}>{d.typeLabel}</span>
+                <span className={`doc-type-pill ${d.type}`}>{labelOf(DOCUMENT_TYPES, d.type)}</span>
               </div>
               <div role="cell" className="doc-ref ref-col">{d.ref}</div>
               <div role="cell" className="doc-title">
                 <h4>{d.title}</h4>
-                <p>{d.summary}</p>
+                <p>{withLinks(d.summary)}</p>
               </div>
-              <div role="cell" className="doc-date">{d.date}</div>
+              <div role="cell" className="doc-date">{formatDate(d.date)}</div>
               <div role="cell" className="doc-size size-col">{d.pages}p · {d.size}</div>
               <div role="cell" className="doc-actions">
                 <button title={d.fileUrl ? 'Aperçu' : 'Aucun fichier'} aria-label={`Aperçu de ${d.title}`} disabled={!d.fileUrl} style={{ opacity: d.fileUrl ? 1 : 0.4, cursor: d.fileUrl ? 'pointer' : 'not-allowed' }} onClick={() => d.fileUrl && window.open(d.fileUrl, '_blank')}><Eye size={15} /></button>

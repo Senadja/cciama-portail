@@ -29,6 +29,7 @@ const AdminPage = lazy(() => import('@/features/admin/AdminPage').then(m => ({ d
 const AgentPage = lazy(() => import('@/features/agent/AgentPage').then(m => ({ default: m.AgentPage })));
 const BIPage    = lazy(() => import('@/features/bi/BIPage').then(m => ({ default: m.BIPage })));
 const LoginPage = lazy(() => import('@/features/auth/LoginPage').then(m => ({ default: m.LoginPage })));
+const CompleteAccountPage = lazy(() => import('@/features/auth/LoginPage').then(m => ({ default: m.CompleteAccountPage })));
 
 function WorkspaceFallback() {
   return (
@@ -40,8 +41,13 @@ function WorkspaceFallback() {
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const mustChangePassword = useAuthStore(state => state.user?.mustChangePassword);
   if (!isAuthenticated) {
     return <Navigate to="/connexion" replace />;
+  }
+  // Mot de passe provisoire : l'API refuse tout tant que le compte n'est pas finalisé.
+  if (mustChangePassword) {
+    return <Navigate to="/connexion/finaliser" replace />;
   }
   return <>{children}</>;
 }
@@ -119,6 +125,7 @@ export default function App() {
             <Route path="agent/*" element={<Suspense fallback={<WorkspaceFallback />}><AgentPage /></Suspense>} />
             <Route path="bi/*"    element={<Suspense fallback={<WorkspaceFallback />}><BIPage /></Suspense>} />
             <Route path="connexion" element={<Suspense fallback={<WorkspaceFallback />}><LoginPage /></Suspense>} />
+            <Route path="connexion/finaliser" element={<Suspense fallback={<WorkspaceFallback />}><CompleteAccountPage /></Suspense>} />
           </Routes>
         </BrowserRouter>
       </MotionConfig>

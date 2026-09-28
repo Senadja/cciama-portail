@@ -5,6 +5,8 @@
 // VITE_API_URL prime si elle est definie (image Docker, autre hebergeur).
 // Sinon : serveur de dev local, ou chemin relatif en build de prod — le
 // rewrite de vercel.json proxifie /api/v1/* vers le backend, en same-origin.
+import { useAuthStore, type User } from '@/stores/useAuthStore';
+
 export const API_BASE =
   import.meta.env.VITE_API_URL ||
   (import.meta.env.DEV ? 'http://localhost:3000/api/v1' : '/api/v1');
@@ -140,18 +142,6 @@ export interface CatalogueService {
   family?: ServiceFamily;
 }
 
-/**
- * Familles du catalogue reservees a l'interne : la F5 « SI interne et gestion »
- * regroupe des modules du systeme d'information (workflow, GED, SIRH, module
- * financier), pas des services aux entreprises. Elles sont masquees des
- * surfaces publiques mais restent editables dans la console d'administration.
- */
-export const INTERNAL_FAMILY_CODES = ['F5'];
-
-export function publicFamilies(families: ServiceFamily[] | undefined): ServiceFamily[] {
-  return (families ?? []).filter(f => !INTERNAL_FAMILY_CODES.includes(f.code));
-}
-
 export interface ServiceFamily {
   id: string;
   code: string;
@@ -176,23 +166,20 @@ interface BaseEntity {
 
 export interface NewsArticle extends BaseEntity {
   cat: string;
-  catLabel: string;
-  date: string;
-  dateShort: string;
+  date: string; // ISO 8601
   title: string;
   excerpt: string;
   body: string;
   author: string;
   readTime: string;
-  image?: string | null;
+  images: string[]; // la premiere sert de vignette
   published: boolean;
 }
 
 export interface OfficialDoc extends BaseEntity {
   type: string;
-  typeLabel: string;
   ref: string;
-  date: string;
+  date: string; // ISO 8601
   title: string;
   summary: string;
   pages: number;
@@ -203,10 +190,10 @@ export interface OfficialDoc extends BaseEntity {
 
 export interface ProjectItem extends BaseEntity {
   status: string;
-  statusLabel: string;
+  type: string;
   title: string;
-  period: string;
-  budget: string;
+  startYear: number;
+  endYear: number | null;
   partner: string;
   progress: number;
   desc: string;
@@ -214,20 +201,18 @@ export interface ProjectItem extends BaseEntity {
 }
 
 export interface OrganismItem extends BaseEntity {
-  kind: string; // 'organism' | 'partner'
   name: string;
   short: string;
   url: string;
-  color: string;
-  mark: string;
+  logo?: string | null;
   published: boolean;
 }
 
 export interface FlashItem extends BaseEntity {
   severity: string;
-  label: string;
   text: string;
-  active: boolean;
+  startsAt: string | null; // ISO 8601, vide = des maintenant
+  endsAt: string | null; // ISO 8601, vide = sans fin
 }
 
 export interface QuickActionItem extends BaseEntity {
@@ -241,16 +226,32 @@ export interface QuickActionItem extends BaseEntity {
 export type Upsert<T extends BaseEntity> = Partial<Omit<T, 'id' | 'updatedBy' | 'updatedAt'>>;
 
 // Helpers for API requests
+/** En-tête d'authentification, si une session est ouverte. */
+function authHeader(): Record<string, string> {
+  const token = useAuthStore.getState().token;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+/** Session expirée ou compte désactivé : on la ferme et on renvoie vers la connexion. */
+function handleUnauthorized(res: Response, hadToken: boolean) {
+  if (res.status !== 401 || !hadToken) return;
+  useAuthStore.getState().logout();
+  if (!window.location.pathname.startsWith('/connexion')) window.location.assign('/connexion');
+}
+
 async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
+  const auth = authHeader();
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...auth,
       ...(options?.headers || {}),
     },
   });
 
   if (!res.ok) {
+    handleUnauthorized(res, 'Authorization' in auth);
     const errText = await res.text();
     let errMsg = `Request failed: ${res.statusText}`;
     try {
@@ -375,12 +376,15 @@ export const api = {
       url += `&altText=${encodeURIComponent(altText)}`;
     }
 
+    const auth = authHeader();
     const res = await fetch(url, {
       method: 'POST',
+      headers: auth,
       body: formData,
     });
 
     if (!res.ok) {
+      handleUnauthorized(res, 'Authorization' in auth);
       const errText = await res.text();
       let errMsg = `Upload failed: ${res.statusText}`;
       try {
@@ -417,3 +421,58 @@ export const collections = {
 };
 
 export type CollectionKey = keyof typeof collections;
+
+// === Comptes, rôles et journal d'activité ===
+export interface AuthSession {
+  access_token: string;
+  user: User;
+}
+
+export interface NewUser {
+  lastName: string;
+  firstName: string;
+  matricule: string;
+  role: User['role'];
+  temporaryPassword: string;
+}
+
+export interface AuditEntry {
+  id: string;
+  entityType: string;
+  entityId: string;
+  field: string;
+  oldValue: string | null;
+  newValue: string | null;
+  updatedBy: string;
+  updatedAt: string;
+}
+
+const post = (body: unknown): RequestInit => ({ method: 'POST', body: JSON.stringify(body) });
+
+export const authApi = {
+  /** Connexion par e-mail ou par matricule. */
+  login: (identifier: string, password: string) => fetchJson<AuthSession>('/auth/login', post({ identifier, password })),
+  me: () => fetchJson<User>('/auth/me'),
+  /** Première connexion : e-mail + mot de passe définitif. */
+  completeAccount: (email: string, newPassword: string) =>
+    fetchJson<AuthSession>('/auth/complete-account', post({ email, newPassword })),
+  changePassword: (currentPassword: string, newPassword: string) =>
+    fetchJson<{ success: boolean }>('/auth/change-password', post({ currentPassword, newPassword })),
+};
+
+export const usersApi = {
+  list: () => fetchJson<User[]>('/admin/users'),
+  create: (data: NewUser) => fetchJson<User>('/admin/users', post(data)),
+  update: (id: string, data: Partial<Omit<NewUser, 'temporaryPassword'>> & { isActive?: boolean }) =>
+    fetchJson<User>(`/admin/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  resetPassword: (id: string, temporaryPassword: string) =>
+    fetchJson<{ success: boolean }>(`/admin/users/${id}/reset-password`, post({ temporaryPassword })),
+  remove: (id: string) => fetchJson<{ success: boolean }>(`/admin/users/${id}`, { method: 'DELETE' }),
+};
+
+export const logsApi = {
+  list: (page = 1, pageSize = 30) =>
+    fetchJson<{ items: AuditEntry[]; total: number; page: number; pageSize: number }>(
+      `/admin/logs?page=${page}&pageSize=${pageSize}`,
+    ),
+};

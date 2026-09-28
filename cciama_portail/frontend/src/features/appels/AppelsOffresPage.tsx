@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, ArrowRight, Clock } from 'lucide-react';
 import { useNews } from '@/hooks/useCms';
+import { NEWS_CATEGORIES, formatDate, labelOf } from '@/lib/format';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.08 } } };
@@ -88,14 +89,14 @@ export function AppelsOffresPage() {
                   aria-label={`Consulter l'appel d'offres : ${t.title}`}
                 >
                   <div className="img">
-                    {t.image
-                      ? <img src={t.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    {t.images[0]
+                      ? <img src={t.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       : <span className="tag">[ avis · appel d'offres ]</span>}
                   </div>
                   <div className="body">
                     <div className="ni-meta">
-                      <span className={`ni-cat ${t.cat}`}>{t.catLabel}</span>
-                      <span>{t.date}</span>
+                      <span className={`ni-cat ${t.cat}`}>{labelOf(NEWS_CATEGORIES, t.cat)}</span>
+                      <span>{formatDate(t.date)}</span>
                       <span style={{ opacity: 0.5 }}>·</span>
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                         <Clock size={12} /> {t.readTime}

@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X, Pause, Play } from 'lucide-react';
 import { useFlashInfos } from '@/hooks/useCms';
+import { FLASH_SEVERITIES, labelOf, todayKey } from '@/lib/format';
 
 export function FlashInfoBand() {
   const { data: flashData } = useFlashInfos();
-  const FLASH_INFOS = (flashData ?? []).filter(f => f.active);
+  const today = todayKey();
+  // Affiche entre ses deux bornes, incluses ; une borne vide ne limite pas.
+  const FLASH_INFOS = (flashData ?? []).filter(f =>
+    (!f.startsAt || f.startsAt.slice(0, 10) <= today) && (!f.endsAt || f.endsAt.slice(0, 10) >= today));
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -53,7 +57,7 @@ export function FlashInfoBand() {
         <div className="flash-stage">
           {FLASH_INFOS.map((f, i) => (
             <div key={i} className={`flash-item ${i === idx ? 'is-current' : ''}`}>
-              <span className="flash-severity">{f.label}</span>
+              <span className="flash-severity">{labelOf(FLASH_SEVERITIES, f.severity)}</span>
               <span className="flash-text">{f.text}</span>
             </div>
           ))}

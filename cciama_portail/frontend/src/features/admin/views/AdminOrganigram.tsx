@@ -316,7 +316,7 @@ export function AdminOrganigram() {
                     fontWeight: 600,
                     lineHeight: 1.4
                   }}>
-                    ⚠️ ATTENTION DANGER ! Ce nœud contient {childrenCount} sous-niveaux / nœuds dépendants (enfants). 
+                    <AlertTriangle size={14} style={{ verticalAlign: '-2px', marginRight: 4 }} />ATTENTION DANGER ! Ce nœud contient {childrenCount} sous-niveaux / nœuds dépendants (enfants). 
                     Si vous validez, TOUTE cette branche hiérarchique ({childrenCount} nœuds) sera supprimée en cascade de manière définitive !
                   </div>
                 ) : (

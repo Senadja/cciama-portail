@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, ArrowRight, ArrowLeft, Clock, User, Share2, Printer, Download, Mail, Phone } from 'lucide-react';
 import { useNews } from '@/hooks/useCms';
+import { NEWS_CATEGORIES, formatDate, labelOf } from '@/lib/format';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.08 } } };
@@ -29,7 +30,7 @@ export function NewsListPage() {
         n.title.toLowerCase().includes(q) ||
         n.excerpt.toLowerCase().includes(q) ||
         (n.author || '').toLowerCase().includes(q) ||
-        n.catLabel.toLowerCase().includes(q)
+        labelOf(NEWS_CATEGORIES, n.cat).toLowerCase().includes(q)
       );
     }
     return true;
@@ -108,14 +109,14 @@ export function NewsListPage() {
                   aria-label={`Lire l'actualité : ${n.title}`}
                 >
                   <div className="img">
-                    {n.image
-                      ? <img src={n.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      : <span className="tag">[ photo · {n.catLabel.toLowerCase()} ]</span>}
+                    {n.images[0]
+                      ? <img src={n.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : <span className="tag">[ photo · {labelOf(NEWS_CATEGORIES, n.cat).toLowerCase()} ]</span>}
                   </div>
                   <div className="body">
                     <div className="ni-meta">
-                      <span className={`ni-cat ${n.cat}`}>{n.catLabel}</span>
-                      <span>{n.date}</span>
+                      <span className={`ni-cat ${n.cat}`}>{labelOf(NEWS_CATEGORIES, n.cat)}</span>
+                      <span>{formatDate(n.date)}</span>
                       <span style={{ opacity: 0.5 }}>·</span>
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                         <Clock size={12} /> {n.readTime}
@@ -178,14 +179,14 @@ export function ArticlePage() {
         <div className="article-wrap">
           <article className="article">
             <div className="article-hero" style={{ marginTop: 16 }}>
-              {article.image
-                ? <img src={article.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                : <span className="tag">[ photo · {article.catLabel.toLowerCase()} ]</span>}
+              {article.images[0]
+                ? <img src={article.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <span className="tag">[ photo · {labelOf(NEWS_CATEGORIES, article.cat).toLowerCase()} ]</span>}
             </div>
 
             <div className="article-meta">
-              <span className={`ni-cat ${article.cat}`}>{article.catLabel}</span>
-              <span>Publié le {article.date}</span>
+              <span className={`ni-cat ${article.cat}`}>{labelOf(NEWS_CATEGORIES, article.cat)}</span>
+              <span>Publié le {formatDate(article.date)}</span>
               <span style={{ opacity: 0.5 }}>·</span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                 <User size={12} /> {article.author}
@@ -202,6 +203,16 @@ export function ArticlePage() {
               <p key={i} className="justify">{para}</p>
             ))}
 
+            {article.images.length > 1 && (
+              <div className="article-gallery" aria-label="Galerie photos">
+                {article.images.slice(1).map((src, i) => (
+                  <a key={src} href={src} target="_blank" rel="noopener noreferrer" aria-label={`Agrandir la photo ${i + 2}`}>
+                    <img src={src} alt="" loading="lazy" />
+                  </a>
+                ))}
+              </div>
+            )}
+
             <div className="share">
               <span>Partager</span>
               <button aria-label="Partager sur les réseaux sociaux"><Share2 size={16} /></button>
@@ -217,7 +228,7 @@ export function ArticlePage() {
                 {related.map(r => (
                   <li key={r.id} style={{ paddingBottom: 14, borderBottom: '1px solid var(--color-rule-soft)' }}>
                     <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--color-red)', fontWeight: 700, marginBottom: 6 }}>
-                      {r.catLabel}
+                      {labelOf(NEWS_CATEGORIES, r.cat)}
                     </div>
                     <Link
                       to={`/actualites/${r.id}`}

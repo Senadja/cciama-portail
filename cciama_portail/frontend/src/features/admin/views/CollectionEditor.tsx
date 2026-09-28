@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, Edit2, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, Edit2, RefreshCw, AlertTriangle, X } from 'lucide-react';
 import { api } from '@/lib/api';
 
 export interface FieldDef {
   key: string;
   label: string;
-  type?: 'text' | 'textarea' | 'number' | 'select' | 'checkbox' | 'image' | 'file';
+  type?: 'text' | 'textarea' | 'number' | 'select' | 'checkbox' | 'image' | 'images' | 'file' | 'date' | 'year';
   options?: { value: string; label: string }[];
   placeholder?: string;
   full?: boolean; // span both columns
+  /** Date ou année facultative : autorise une valeur vide. */
+  optional?: boolean;
+  /** Type du média téléversé ; « logo » l'exclut de la médiathèque publique. */
+  mediaType?: 'image' | 'logo';
 }
 
 export interface ColumnDef {
@@ -36,6 +40,8 @@ export interface CollectionConfig {
   columns: ColumnDef[];
   defaults: Record<string, any>;
   titleField: string;
+  /** Titre du formulaire de création, à défaut « Nouveau · {itemLabel} ». */
+  newLabel?: string;
 }
 
 const st = {
@@ -62,7 +68,7 @@ function FileUploadField({ field, value, onChange }: { field: FieldDef; value: a
     setErr('');
     setUploading(true);
     try {
-      const res = await api.uploadMedia(file, isImage ? 'image' : 'document');
+      const res = await api.uploadMedia(file, isImage ? (field.mediaType ?? 'image') : 'document');
       onChange(res.url);
     } catch (e: any) {
       setErr(e.message || 'Échec du téléversement.');
@@ -91,9 +97,82 @@ function FileUploadField({ field, value, onChange }: { field: FieldDef; value: a
   );
 }
 
+/** Plusieurs images, dans l'ordre d'ajout : la première sert de vignette. */
+function ImagesField({ value, onChange }: { value: string[] | undefined; onChange: (v: string[]) => void }) {
+  const images = value ?? [];
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState('');
+
+  const handleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    e.target.value = '';
+    if (!files.length) return;
+    setErr('');
+    setUploading(true);
+    try {
+      const urls: string[] = [];
+      for (const file of files) urls.push((await api.uploadMedia(file, 'image')).url);
+      onChange([...images, ...urls]);
+    } catch (e: any) {
+      setErr(e.message || 'Échec du téléversement.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      {images.length > 0 && (
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 10 }}>
+          {images.map((src, i) => (
+            <div key={src} style={{ position: 'relative' }}>
+              <img src={src} alt="" style={{ width: 104, height: 78, objectFit: 'cover', borderRadius: 4, display: 'block', border: i === 0 ? '2px solid var(--color-gold)' : '1px solid var(--color-rule)' }} />
+              {i === 0 && (
+                <span style={{ position: 'absolute', left: 4, bottom: 4, fontSize: 10, fontWeight: 700, background: 'var(--color-gold)', color: 'white', padding: '1px 6px', borderRadius: 3 }}>Vignette</span>
+              )}
+              <button type="button" aria-label="Retirer cette image" title="Retirer" onClick={() => onChange(images.filter((_, k) => k !== i))}
+                style={{ position: 'absolute', top: -7, right: -7, width: 20, height: 20, borderRadius: '50%', border: '1px solid var(--color-rule)', background: 'white', color: 'var(--color-red)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: 0 }}>
+                <X size={12} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      <label className="btn btn-outline" style={{ cursor: uploading ? 'wait' : 'pointer', fontSize: 13 }}>
+        {uploading ? 'Téléversement…' : images.length ? 'Ajouter des images' : 'Téléverser des images'}
+        <input type="file" multiple accept="image/png,image/jpeg,image/webp" style={{ display: 'none' }} onChange={handleFiles} disabled={uploading} />
+      </label>
+      {err && <div style={{ color: 'var(--color-red)', fontSize: 12, marginTop: 6 }}>{err}</div>}
+    </div>
+  );
+}
+
 function FieldInput({ field, value, onChange }: { field: FieldDef; value: any; onChange: (v: any) => void }) {
   if (field.type === 'image' || field.type === 'file') {
     return <FileUploadField field={field} value={value} onChange={onChange} />;
+  }
+  if (field.type === 'images') {
+    return <ImagesField value={value} onChange={onChange} />;
+  }
+  if (field.type === 'date') {
+    // Stockée à minuit UTC : le jour choisi est celui affiché partout.
+    return (
+      <input type="date" style={st.input} required={!field.optional} value={value ? String(value).slice(0, 10) : ''}
+        onChange={e => onChange(e.target.value ? `${e.target.value}T00:00:00.000Z` : null)} />
+    );
+  }
+  if (field.type === 'year') {
+    const now = new Date().getFullYear();
+    const years: number[] = [];
+    for (let y = now + 10; y >= now - 20; y--) years.push(y);
+    if (typeof value === 'number' && !years.includes(value)) years.push(value);
+    return (
+      <select style={st.input} required={!field.optional} value={value ?? ''}
+        onChange={e => onChange(e.target.value ? Number(e.target.value) : null)}>
+        <option value="">{field.optional ? '— Non définie —' : '— Choisir —'}</option>
+        {years.sort((a, b) => b - a).map(y => <option key={y} value={y}>{y}</option>)}
+      </select>
+    );
   }
   if (field.type === 'textarea') {
     return <textarea style={{ ...st.input, minHeight: 90, resize: 'vertical' }} value={value ?? ''} placeholder={field.placeholder} onChange={e => onChange(e.target.value)} />;
@@ -171,7 +250,7 @@ export function CollectionEditor({ config }: { config: CollectionConfig }) {
         <div style={st.pageHead}>
           <div>
             <button type="button" onClick={() => setEditing(null)} style={{ background: 'transparent', border: 0, cursor: 'pointer', fontSize: 13, color: 'var(--color-ink-mute)', fontWeight: 500, padding: 0 }}>← Retour à la liste</button>
-            <h1 style={{ ...st.title, marginTop: 8 }}>{editing === 'new' ? `Nouveau · ${config.itemLabel}` : `Éditer · ${editing[config.titleField] ?? config.itemLabel}`}</h1>
+            <h1 style={{ ...st.title, marginTop: 8 }}>{editing === 'new' ? (config.newLabel ?? `Nouveau · ${config.itemLabel}`) : `Éditer · ${editing[config.titleField] ?? config.itemLabel}`}</h1>
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
             <button type="button" className="btn btn-outline" onClick={() => setEditing(null)}>Annuler</button>

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, Phone, Mail, Clock, Download } from 'lucide-react';
 import { useMinisterContent, useMissions, useOrganigram, useProjects } from '@/hooks/useCms';
+import { PROJECT_STATUSES, formatYears, labelOf } from '@/lib/format';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.08 } } };
@@ -183,7 +184,20 @@ export function ProjetsPage() {
     { id: 'planned', label: 'Programmés' },
     { id: 'completed', label: 'Achevés' },
   ];
-  const filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.status === filter);
+  const [year, setYear] = useState<number | null>(null);
+
+  // Années couvertes par au moins un projet ; un projet sans fin court jusqu'à l'année en cours.
+  const currentYear = new Date().getFullYear();
+  const years: number[] = [];
+  if (PROJECTS.length) {
+    const first = Math.min(...PROJECTS.map(p => p.startYear));
+    const last = Math.max(...PROJECTS.map(p => p.endYear ?? currentYear));
+    for (let y = last; y >= first; y--) years.push(y);
+  }
+  const coversYear = (p: { startYear: number; endYear: number | null }) =>
+    year === null || (p.startYear <= year && (p.endYear ?? currentYear) >= year);
+
+  const filtered = PROJECTS.filter(p => (filter === 'all' || p.status === filter) && coversYear(p));
 
   return (
     <>
@@ -203,6 +217,13 @@ export function ProjetsPage() {
               </button>
             ))}
           </div>
+          <label className="period-filter">
+            Période
+            <select value={year ?? ''} onChange={e => setYear(e.target.value ? Number(e.target.value) : null)}>
+              <option value="">Toutes les années</option>
+              {years.map(y => <option key={y} value={y}>{y}</option>)}
+            </select>
+          </label>
           <div className="total" style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-mute)' }}>
             {filtered.length} projet{filtered.length > 1 ? 's' : ''}
           </div>
@@ -212,9 +233,9 @@ export function ProjetsPage() {
             <motion.div key={p.id} className="project-card" variants={fadeUp}>
               <div className="project-head">
                 <span className={`status-pill ${p.status === 'ongoing' ? 'progress' : p.status === 'completed' ? 'done' : 'review'}`}>
-                  {p.statusLabel}
+                  {labelOf(PROJECT_STATUSES, p.status)}
                 </span>
-                <span className="project-period">{p.period}</span>
+                <span className="project-period">{formatYears(p.startYear, p.endYear)}</span>
               </div>
               <h3>{p.title}</h3>
               <p>{p.desc}</p>
@@ -236,7 +257,7 @@ export function ProjetsPage() {
                 <div className="progress-label">réalisé</div>
               </div>
               <div className="project-meta">
-                <div><div className="k">Budget</div><div className="v">{p.budget}</div></div>
+                <div><div className="k">Type</div><div className="v">{p.type || '—'}</div></div>
                 <div><div className="k">Partenaire</div><div className="v">{p.partner}</div></div>
               </div>
             </motion.div>

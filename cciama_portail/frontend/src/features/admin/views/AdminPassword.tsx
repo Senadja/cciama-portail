@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { API_BASE } from '@/lib/api';
-import { useAuthStore } from '@/stores/useAuthStore';
+import { authApi } from '@/lib/api';
+import { accountName, useAuthStore } from '@/stores/useAuthStore';
 import { KeyRound, Save, AlertTriangle } from 'lucide-react';
 
 const labelStyle = {
@@ -45,22 +45,10 @@ export function AdminPassword() {
       setToast({ type: 'error', message: "Le nouveau mot de passe doit être différent de l'actuel." });
       return;
     }
-    if (!user?.email) {
-      setToast({ type: 'error', message: 'Session invalide. Reconnectez-vous.' });
-      return;
-    }
-
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/auth/change-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email, currentPassword, newPassword }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || 'Échec du changement de mot de passe.');
-      }
+      // Le compte est identifié par la session : plus besoin de transmettre l'e-mail.
+      await authApi.changePassword(currentPassword, newPassword);
       setToast({ type: 'success', message: 'Mot de passe mis à jour avec succès.' });
       setCurrentPassword('');
       setNewPassword('');
@@ -79,7 +67,7 @@ export function AdminPassword() {
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-ink-mute)', marginBottom: 4 }}>Sécurité</div>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 24, fontWeight: 600, color: 'var(--color-ink)' }}>Mot de passe</h1>
           <p style={{ fontSize: 14, color: 'var(--color-ink-mute)', marginTop: 4 }}>
-            Modifiez le mot de passe du compte {user?.email ? <strong>{user.email}</strong> : 'connecté'}.
+            Modifiez le mot de passe du compte {user ? <strong>{accountName(user)}</strong> : 'connecté'}.
           </p>
         </div>
       </div>

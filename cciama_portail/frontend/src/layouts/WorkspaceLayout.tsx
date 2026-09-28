@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Bell, LogOut, PanelLeftClose, PanelLeft } from 'lucide-react';
+import { Search, Bell, LogOut, PanelLeftClose, PanelLeft, ChevronDown, Globe } from 'lucide-react';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 interface SectionItem {
   id: string;
@@ -30,8 +32,64 @@ const accentColors = {
   gold: { bg: '#7A5A0E', hover: 'rgba(122,90,14,0.08)', active: 'rgba(122,90,14,0.12)' },
 };
 
-export function WorkspaceLayout({ children, role, accent, sections, current, onNav, user }: WorkspaceShellProps) {
+/** Nom de l'utilisateur dans l'en-tête ; le menu mène au portail public ou déconnecte. */
+function UserMenu({ user, color }: { user: WorkspaceShellProps['user']; color: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useClickOutside<HTMLDivElement>(useCallback(() => setOpen(false), []));
   const navigate = useNavigate();
+  const logout = useAuthStore(s => s.logout);
+
+  const item = {
+    display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '9px 12px',
+    background: 'transparent', border: 0, borderRadius: 4, cursor: 'pointer',
+    fontSize: 13, color: 'var(--color-ink-soft)', textAlign: 'left' as const,
+  };
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          background: 'transparent', border: '1px solid var(--color-rule)',
+          borderRadius: 6, padding: '4px 10px 4px 4px', cursor: 'pointer',
+        }}
+      >
+        <span style={{
+          width: 30, height: 30, borderRadius: '50%', background: color, color: 'white',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, flexShrink: 0,
+        }}>{user.initials}</span>
+        <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-ink)', whiteSpace: 'nowrap' }}>{user.name}</span>
+          <span style={{ fontSize: 11, color: 'var(--color-ink-mute)' }}>{user.role}</span>
+        </span>
+        <ChevronDown size={14} style={{ color: 'var(--color-ink-mute)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+      </button>
+      {open && (
+        <div role="menu" style={{
+          position: 'absolute', right: 0, top: 'calc(100% + 6px)', minWidth: 210, zIndex: 50,
+          background: 'white', border: '1px solid var(--color-rule)', borderRadius: 8,
+          boxShadow: 'var(--shadow-lg)', padding: 6,
+        }}>
+          <button role="menuitem" style={item} onClick={() => navigate('/')}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-cream)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+            <Globe size={15} /> Portail public
+          </button>
+          <button role="menuitem" style={{ ...item, color: 'var(--color-red)' }} onClick={() => { logout(); navigate('/connexion'); }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-cream)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+            <LogOut size={15} /> Se déconnecter
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function WorkspaceLayout({ children, role, accent, sections, current, onNav, user }: WorkspaceShellProps) {
   const [collapsed, setCollapsed] = useState(false);
   const ac = accentColors[accent];
 
@@ -124,46 +182,6 @@ export function WorkspaceLayout({ children, role, accent, sections, current, onN
           ))}
         </nav>
 
-        {/* Sidebar footer: user + back link */}
-        <div style={{ borderTop: '1px solid var(--color-rule-soft)' }}>
-          {!collapsed && (
-            <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{
-                width: 32, height: 32,
-                background: ac.bg,
-                borderRadius: '50%',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: 'white', fontSize: 12, fontWeight: 700,
-                flexShrink: 0,
-              }}>{user.initials}</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</div>
-                <div style={{ fontSize: 11, color: 'var(--color-ink-mute)' }}>{user.role}</div>
-              </div>
-            </div>
-          )}
-          <button
-            onClick={() => navigate('/')}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              width: '100%', padding: collapsed ? '12px 20px' : '10px 20px',
-              background: 'transparent', border: 0, cursor: 'pointer',
-              fontSize: 12, color: 'var(--color-ink-mute)',
-              borderTop: collapsed ? 0 : '1px solid var(--color-rule-soft)',
-              transition: 'color 0.12s',
-              justifyContent: collapsed ? 'center' : 'flex-start',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = ac.bg)}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-ink-mute)')}
-            title="Retour au portail public"
-            aria-label="Retour au portail public"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <polyline points="15 18 9 12 15 6"/>
-            </svg>
-            {!collapsed && <span>Retour au portail public</span>}
-          </button>
-        </div>
       </aside>
 
       {/* Main */}
@@ -230,18 +248,7 @@ export function WorkspaceLayout({ children, role, accent, sections, current, onN
             }} />
           </button>
 
-          <button
-            onClick={() => navigate('/')}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              background: 'transparent', border: '1px solid var(--color-rule)',
-              borderRadius: 4, padding: '6px 12px', cursor: 'pointer',
-              fontSize: 12, color: 'var(--color-ink-soft)',
-            }}
-          >
-            <LogOut size={14} />
-            Portail public
-          </button>
+          <UserMenu user={user} color={ac.bg} />
         </div>
 
         {/* Content area */}

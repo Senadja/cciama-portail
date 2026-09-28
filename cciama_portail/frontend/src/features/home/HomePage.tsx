@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Marquee } from '@/components/Marquee';
 import { useHomeContent, usePlatformSettings, useNews, useOrganisms, useServiceCatalogue } from '@/hooks/useCms';
-import { publicFamilies } from '@/lib/api';
+import { NEWS_CATEGORIES, formatDate, labelOf } from '@/lib/format';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
@@ -16,9 +16,9 @@ export function HomePage() {
   // appels d'offres -> /appels-offres).
   const NEWS = (newsData ?? []).filter(n => n.cat !== 'decret' && n.cat !== 'appel');
   const { data: orgData } = useOrganisms();
-  const PARTNERS = (orgData ?? []).filter(o => o.kind === 'partner');
+  const PARTNERS = (orgData ?? []).filter(o => o.published);
   const { data: catalogue } = useServiceCatalogue();
-  const previewServices = publicFamilies(catalogue).flatMap(f => f.services ?? []).slice(0, 3);
+  const previewServices = (catalogue ?? []).flatMap(f => f.services ?? []).slice(0, 3);
 
   const heroEyebrow = home?.heroEyebrow || "Chambre de Commerce, d'Industrie, d'Agriculture, des Mines et de l'Artisanat du Tchad";
   const heroTitle = home?.heroTitle || "La voix institutionnelle du secteur privé tchadien.";
@@ -91,8 +91,8 @@ export function HomePage() {
                 {NEWS.slice(0, 4).map(n => (
                   <Link key={n.id} to={`/actualites/${n.id}`} className="news-item">
                     <div className="ni-meta">
-                      <span className={`ni-cat ${n.cat}`}>{n.catLabel}</span>
-                      <span>{n.date}</span>
+                      <span className={`ni-cat ${n.cat}`}>{labelOf(NEWS_CATEGORIES, n.cat)}</span>
+                      <span>{formatDate(n.date)}</span>
                     </div>
                     <h3>{n.title}</h3>
                     <span className="ni-arrow">

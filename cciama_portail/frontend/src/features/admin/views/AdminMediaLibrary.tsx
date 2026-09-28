@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAllMedia, useUploadMediaMutation, useDeleteMediaMutation } from '@/hooks/useCms';
-import { Upload, Trash2, Image, FileText, Video, RefreshCw, X, Plus, ExternalLink, Calendar, HardDrive } from 'lucide-react';
+import { Upload, Trash2, Image, FileText, Video, RefreshCw, X, Plus, ExternalLink, Calendar, HardDrive, AlertTriangle } from 'lucide-react';
 
 export function AdminMediaLibrary() {
   const [filterType, setFilterType] = useState<string>('all');
@@ -280,7 +280,7 @@ export function AdminMediaLibrary() {
                 <p style={{ fontSize: 13, color: 'var(--color-ink-soft)', lineHeight: 1.5 }}>
                   Voulez-vous vraiment supprimer le fichier média <strong>"{targetMedia?.filename}"</strong> de la bibliothèque ?
                   <br /><br />
-                  <span style={{ color: 'var(--color-red)', fontWeight: 'bold' }}>⚠️ Danger :</span> Cette action effacera définitivement l'objet du serveur de stockage MinIO S3. Tous les liens publics pointant vers ce fichier seront rompus !
+                  <span style={{ color: 'var(--color-red)', fontWeight: 'bold' }}><AlertTriangle size={14} style={{ verticalAlign: '-2px', marginRight: 4 }} />Danger :</span> Cette action effacera définitivement l'objet du serveur de stockage MinIO S3. Tous les liens publics pointant vers ce fichier seront rompus !
                 </p>
               </div>
             </div>

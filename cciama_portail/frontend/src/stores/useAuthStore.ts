@@ -1,12 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface User {
+export type Role = 'ADMIN' | 'EDITOR';
+
+export interface User {
   id: string;
-  email: string;
-  role: string;
-  firstName?: string;
-  lastName?: string;
+  email: string | null;
+  matricule: string | null;
+  role: Role;
+  firstName?: string | null;
+  lastName?: string | null;
+  isActive?: boolean;
+  /** Mot de passe provisoire : le compte doit être finalisé avant tout accès à la console. */
+  mustChangePassword: boolean;
 }
 
 interface AuthState {
@@ -31,3 +37,9 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
+
+/** « Prénom Nom », à défaut l'e-mail ou le matricule. */
+export function accountName(u: Pick<User, 'firstName' | 'lastName' | 'email' | 'matricule'> | null | undefined): string {
+  if (!u) return '';
+  return [u.firstName, u.lastName].filter(Boolean).join(' ') || u.email || u.matricule || 'Utilisateur';
+}

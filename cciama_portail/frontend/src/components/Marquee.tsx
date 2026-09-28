@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { LogoMark } from '@/components/icons/LogoMark';
-import type { Organism } from '@/types';
+import type { OrganismItem } from '@/lib/api';
 
 interface MarqueeProps {
-  items: Organism[];
+  items: OrganismItem[];
   speed?: number;
   label: string;
   eyebrow: string;
@@ -33,7 +32,9 @@ export function Marquee({ items, speed = 40, label, eyebrow, viewAllPath }: Marq
           <div className="marquee-track" style={{ animationDuration: `${speed}s` }}>
             {doubled.map((item, i) => (
               <a key={i} className="marquee-item" href={item.url}>
-                <LogoMark type={item.mark} color={item.color} />
+                {item.logo
+                  ? <img className="logo-mark" src={item.logo} alt="" />
+                  : <span className="logo-mark logo-mark-fallback" aria-hidden="true">{item.short.slice(0, 4)}</span>}
                 <div>
                   <div className="logo-short">{item.short}</div>
                   <div className="logo-name">{item.name}</div>
