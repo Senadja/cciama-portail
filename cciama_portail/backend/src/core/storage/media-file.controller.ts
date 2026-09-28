@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
-import { Unprotected } from 'nest-keycloak-connect';
 import { Response } from 'express';
 import { PrismaService } from '../database/prisma.service';
 import { MinioService } from './minio.service';
+import { Public } from '../../features/auth/auth.decorators';
 
 /**
  * Sert publiquement un média stocké dans MinIO (réseau interne) en le streamant
@@ -10,7 +10,7 @@ import { MinioService } from './minio.service';
  * /api/v1/* déjà en place côté front (pas de mixed-content HTTPS→HTTP).
  */
 @Controller('content/media')
-@Unprotected()
+@Public()
 export class MediaFileController {
   constructor(
     private readonly prisma: PrismaService,

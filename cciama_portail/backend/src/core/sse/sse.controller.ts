@@ -2,10 +2,10 @@ import { Controller, Sse, MessageEvent } from '@nestjs/common';
 import { SseService } from './sse.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Unprotected } from 'nest-keycloak-connect';
+import { Public } from '../../features/auth/auth.decorators';
 
 @Controller('content')
-@Unprotected()
+@Public()
 export class SseController {
   constructor(private readonly sseService: SseService) {}
 

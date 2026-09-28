@@ -108,15 +108,17 @@ model ContentUpdateHistory {
 
 // 8. Auth / Users
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  passwordHash String
-  role         String   @default("ADMIN")
-  firstName    String?
-  lastName     String?
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                 String   @id @default(uuid())
+  email              String?  @unique // renseigne par l'utilisateur a sa premiere connexion
+  matricule          String?  @unique
+  passwordHash       String
+  role               String   @default("EDITOR") // 'ADMIN' | 'EDITOR'
+  firstName          String?
+  lastName           String?
+  isActive           Boolean  @default(true)
+  mustChangePassword Boolean  @default(false) // mot de passe provisoire a remplacer
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 // 9. Service families (Famille 1 → 5 du catalogue)
@@ -135,30 +137,27 @@ model ServiceFamily {
 
 // 11. Actualités & communiqués
 model NewsArticle {
-  id        String   @id @default(uuid())
-  cat       String // 'communique' | 'evenement' | 'decret' | 'appel'
-  catLabel  String
-  date      String // libellé affiché, ex. '21 mai 2026'
-  dateShort String // ex. '21 MAI'
-  title     String   @db.Text
-  excerpt   String   @db.Text
-  body      String   @db.Text // corps de l'article (paragraphes séparés par \n\n)
-  author    String
-  readTime  String
-  image     String? // chemin/URL média éventuel
-  published Boolean  @default(true)
-  orderIndex Int     @default(0)
-  updatedBy String
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(uuid())
+  cat        String // 'communique' | 'evenement' | 'decret' | 'appel'
+  date       DateTime
+  title      String   @db.Text
+  excerpt    String   @db.Text
+  body       String   @db.Text // corps de l'article (paragraphes séparés par \n\n)
+  author     String
+  readTime   String
+  images     String[] @default([]) // URLs des images, la premiere sert de vignette
+  published  Boolean  @default(true)
+  orderIndex Int      @default(0)
+  updatedBy  String
+  updatedAt  DateTime @updatedAt
 }
 
 // 12. Documentation officielle
 model OfficialDocument {
   id         String   @id @default(uuid())
   type       String // 'decret' | 'loi' | 'arrete' | 'circulaire' | 'rapport'
-  typeLabel  String
   ref        String
-  date       String
+  date       DateTime
   title      String   @db.Text
   summary    String   @db.Text
   pages      Int
@@ -172,30 +171,28 @@ model OfficialDocument {
 
 // 13. Projets & programmes
 model Project {
-  id          String   @id @default(uuid())
-  status      String // 'ongoing' | 'completed' | 'planned'
-  statusLabel String
-  title       String
-  period      String
-  budget      String
-  partner     String
-  progress    Int      @default(0)
-  desc        String   @db.Text
-  published   Boolean  @default(true)
-  orderIndex  Int      @default(0)
-  updatedBy   String
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  status     String // 'ongoing' | 'completed' | 'planned'
+  type       String   @default("") // saisie libre
+  title      String
+  startYear  Int
+  endYear    Int?
+  partner    String
+  progress   Int      @default(0)
+  desc       String   @db.Text
+  published  Boolean  @default(true)
+  orderIndex Int      @default(0)
+  updatedBy  String
+  updatedAt  DateTime @updatedAt
 }
 
 // 14. Organismes sous tutelle & partenaires
 model Organism {
   id         String   @id @default(uuid())
-  kind       String // 'organism' | 'partner'
   name       String   @db.Text
   short      String
   url        String
-  color      String
-  mark       String
+  logo       String? // URL du logo televerse
   published  Boolean  @default(true)
   orderIndex Int      @default(0)
   updatedBy  String
@@ -204,14 +201,14 @@ model Organism {
 
 // 15. Bande Flash Infos
 model FlashInfo {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   severity   String // 'info' | 'warning' | 'danger' | 'success'
-  label      String
-  text       String   @db.Text
-  active     Boolean  @default(true)
-  orderIndex Int      @default(0)
+  text       String    @db.Text
+  startsAt   DateTime? // vide = des maintenant
+  endsAt     DateTime? // vide = sans fin
+  orderIndex Int       @default(0)
   updatedBy  String
-  updatedAt  DateTime @updatedAt
+  updatedAt  DateTime  @updatedAt
 }
 
 // 16. Démarches en accès rapide (page d'accueil)

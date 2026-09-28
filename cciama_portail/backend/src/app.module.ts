@@ -7,10 +7,11 @@ import { CacheModule } from './core/cache/cache.module';
 import { StorageModule } from './core/storage/storage.module';
 import { QueueModule } from './core/queue/queue.module';
 import { SearchModule } from './core/search/search.module';
-import { SecurityModule } from './core/security/security.module';
 import { SseModule } from './core/sse/sse.module';
 import { CmsModule } from './features/cms/cms.module';
 import { AuthModule } from './features/auth/auth.module';
+import { UsersModule } from './features/users/users.module';
+import { AuditModule } from './features/audit/audit.module';
 import { AssistantModule } from './features/assistant/assistant.module';
 import { HttpLoggerMiddleware } from './core/logger/http-logger.middleware';
 
@@ -28,9 +29,10 @@ import { HttpLoggerMiddleware } from './core/logger/http-logger.middleware';
     StorageModule,
     QueueModule,
     SearchModule,
-    SecurityModule,
     SseModule,
     AuthModule,
+    UsersModule,
+    AuditModule,
     CmsModule,
     AssistantModule,
   ],

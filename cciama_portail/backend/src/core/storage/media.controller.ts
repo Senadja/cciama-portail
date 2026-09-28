@@ -11,16 +11,17 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MediaService } from './media.service';
-import { Unprotected } from 'nest-keycloak-connect';
+import { CurrentUser, Public, Roles, AuthUser } from '../../features/auth/auth.decorators';
 
 @Controller('admin/media')
-@Unprotected() // Unprotected for easy dev testing and local execution
+@Roles('ADMIN', 'EDITOR')
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
+    @CurrentUser() user: AuthUser,
     @UploadedFile() file: Express.Multer.File,
     @Query('type') type: 'image' | 'document' | 'logo' | 'video',
     @Query('altText') altText?: string
@@ -32,7 +33,7 @@ export class MediaController {
       throw new BadRequestException('Invalid media type. Must be: image, document, logo, or video.');
     }
 
-    const media = await this.mediaService.uploadMedia(file, type, altText);
+    const media = await this.mediaService.uploadMedia(file, type, altText, user.name);
     const presignedUrl = await this.mediaService.getMediaUrl(media.id);
 
     return {
@@ -42,6 +43,7 @@ export class MediaController {
     };
   }
 
+  @Public()
   @Get()
   async getAllMedia(@Query('type') type?: string) {
     const assets = await this.mediaService.getAllMedia(type);
@@ -61,6 +63,7 @@ export class MediaController {
     return richAssets;
   }
 
+  @Public()
   @Get(':id/url')
   async getMediaUrl(@Param('id') id: string) {
     const url = await this.mediaService.getMediaUrl(id);

@@ -3,12 +3,10 @@ import { PrismaService } from '../../core/database/prisma.service';
 import { SseService } from '../../core/sse/sse.service';
 
 export interface CreateOrganismDto {
-  kind: string;
   name: string;
   short: string;
   url: string;
-  color: string;
-  mark: string;
+  logo?: string | null;
   published?: boolean;
   orderIndex?: number;
 }

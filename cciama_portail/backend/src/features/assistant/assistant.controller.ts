@@ -1,10 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { Unprotected } from 'nest-keycloak-connect';
 import { AssistantService } from './assistant.service';
 import { ChatRequestDto } from './assistant.dto';
+import { Public } from '../auth/auth.decorators';
 
 @Controller('assistant')
-@Unprotected()
+@Public()
 export class AssistantController {
   constructor(private readonly assistant: AssistantService) {}
 

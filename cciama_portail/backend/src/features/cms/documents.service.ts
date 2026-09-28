@@ -4,9 +4,8 @@ import { SseService } from '../../core/sse/sse.service';
 
 export interface CreateDocumentDto {
   type: string;
-  typeLabel: string;
   ref: string;
-  date: string;
+  date: string; // ISO 8601
   title: string;
   summary: string;
   pages: number;

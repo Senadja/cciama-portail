@@ -45,6 +45,14 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  // Amorçage réservé à une base vierge. Rejoué à chaque démarrage du conteneur,
+  // il écrasait sinon les fiches modifiées dans la console, recréait celles qui
+  // avaient été supprimées et réinsérait les contenus de démonstration effacés.
+  if ((await prisma.serviceFamily.count()) > 0) {
+    console.log('Base déjà initialisée : amorçage ignoré.');
+    return;
+  }
+
   const file = path.join(__dirname, 'seed-data', 'services.json');
   const data: SeedData = JSON.parse(fs.readFileSync(file, 'utf8'));
 

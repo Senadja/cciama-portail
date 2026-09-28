@@ -4,15 +4,13 @@ import { SseService } from '../../core/sse/sse.service';
 
 export interface CreateNewsDto {
   cat: string;
-  catLabel: string;
-  date: string;
-  dateShort: string;
+  date: string; // ISO 8601
   title: string;
   excerpt: string;
   body: string;
   author: string;
   readTime: string;
-  image?: string;
+  images?: string[];
   published?: boolean;
   orderIndex?: number;
 }

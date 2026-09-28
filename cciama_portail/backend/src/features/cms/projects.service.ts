@@ -4,10 +4,10 @@ import { SseService } from '../../core/sse/sse.service';
 
 export interface CreateProjectDto {
   status: string;
-  statusLabel: string;
+  type: string;
   title: string;
-  period: string;
-  budget: string;
+  startYear: number;
+  endYear?: number | null;
   partner: string;
   progress: number;
   desc: string;

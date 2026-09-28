@@ -4,9 +4,9 @@ import { SseService } from '../../core/sse/sse.service';
 
 export interface CreateFlashDto {
   severity: string;
-  label: string;
   text: string;
-  active?: boolean;
+  startsAt?: string | null; // ISO 8601, vide = des maintenant
+  endsAt?: string | null; // ISO 8601, vide = sans fin
   orderIndex?: number;
 }
 
@@ -39,7 +39,7 @@ export class FlashService {
         entityType: 'flash_info',
         entityId: item.id,
         field: 'create',
-        newValue: item.label,
+        newValue: item.text,
         updatedBy: username
       }
     });
@@ -67,8 +67,8 @@ export class FlashService {
         entityType: 'flash_info',
         entityId: id,
         field: 'update',
-        oldValue: existing.label,
-        newValue: updated.label,
+        oldValue: existing.text,
+        newValue: updated.text,
         updatedBy: username
       }
     });
@@ -90,7 +90,7 @@ export class FlashService {
         entityType: 'flash_info',
         entityId: id,
         field: 'delete',
-        oldValue: existing.label,
+        oldValue: existing.text,
         updatedBy: username
       }
     });
