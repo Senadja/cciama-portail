@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../core/database/prisma.service';
 import { SseService } from '../../core/sse/sse.service';
 
@@ -10,45 +10,11 @@ export interface CreateMissionDto {
 }
 
 @Injectable()
-export class MissionsService implements OnModuleInit {
-  private readonly logger = new Logger(MissionsService.name);
-
+export class MissionsService {
   constructor(
     private prisma: PrismaService,
     private sseService: SseService
   ) {}
-
-  async onModuleInit() {
-    try {
-      await this.seedDefaultContent();
-    } catch (err) {
-      this.logger.warn(`seedDefaultContent skipped: ${err?.message ?? err}`);
-    }
-  }
-
-  private async seedDefaultContent() {
-    const count = await this.prisma.institutionMission.count();
-    if (count === 0) {
-      const defaults = [
-        { num: '01', title: 'Représentation et Défense', desc: "Représenter et défendre les intérêts des commerçants, industriels, agriculteurs, miniers et artisans auprès des pouvoirs publics.", orderIndex: 0 },
-        { num: '02', title: 'Interface Publique/Privée', desc: "Servir d'interface entre l'État et les opérateurs économiques pour un dialogue constructif et permanent.", orderIndex: 1 },
-        { num: '03', title: 'Avis et Recommandations', desc: "Fournir aux pouvoirs publics des avis sur les questions économiques, sociales, juridiques, fiscales et administratives.", orderIndex: 2 },
-        { num: '04', title: 'Climat des Affaires', desc: "Contribuer activement à l'amélioration du climat des affaires et à la création d'emplois au niveau national.", orderIndex: 3 },
-        { num: '05', title: 'Développement Durable', desc: "Appuyer le développement économique durable dans les secteurs de l'agriculture, du commerce et des industries extractives.", orderIndex: 4 },
-        { num: '06', title: 'Accompagnement', desc: "Soutenir la structuration des PME/PMI, avec une attention particulière pour les femmes et les jeunes entrepreneurs.", orderIndex: 5 }
-      ];
-
-      for (const d of defaults) {
-        await this.prisma.institutionMission.create({
-          data: {
-            ...d,
-            updatedBy: 'system'
-          }
-        });
-      }
-      this.logger.log('Seeded default missions list');
-    }
-  }
 
   async getAllMissions() {
     return this.prisma.institutionMission.findMany({

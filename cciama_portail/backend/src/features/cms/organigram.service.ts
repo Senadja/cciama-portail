@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../core/database/prisma.service';
 import { SseService } from '../../core/sse/sse.service';
 
@@ -10,59 +10,11 @@ export interface CreateOrganigramNodeDto {
 }
 
 @Injectable()
-export class OrganigramService implements OnModuleInit {
-  private readonly logger = new Logger(OrganigramService.name);
-
+export class OrganigramService {
   constructor(
     private prisma: PrismaService,
     private sseService: SseService
   ) {}
-
-  async onModuleInit() {
-    try {
-      await this.seedDefaultContent();
-    } catch (err) {
-      this.logger.warn(`seedDefaultContent skipped: ${err?.message ?? err}`);
-    }
-  }
-
-  private async seedDefaultContent() {
-    const count = await this.prisma.organigramNode.count();
-    if (count === 0) {
-      // Tier 1
-      const ag = await this.prisma.organigramNode.create({
-        data: { role: 'Assemblée Générale', name: '130 membres élus', orderIndex: 0, updatedBy: 'system' }
-      });
-
-      // Tier 2
-      const be = await this.prisma.organigramNode.create({
-        data: { role: 'Bureau Exécutif', name: '15 membres élus', parentId: ag.id, orderIndex: 0, updatedBy: 'system' }
-      });
-
-      // Tier 3
-      const directions = [
-        "Direction des Formalités",
-        "Direction de l'Appui PME/PMI",
-        "Direction de la Formation (CFPP)",
-        "Direction des Projets & Études",
-        "Direction Administrative et Financière"
-      ];
-
-      for (let i = 0; i < directions.length; i++) {
-        await this.prisma.organigramNode.create({
-          data: {
-            role: 'Direction',
-            name: directions[i],
-            parentId: be.id,
-            orderIndex: i,
-            updatedBy: 'system'
-          }
-        });
-      }
-
-      this.logger.log('Seeded default organigram hierarchy (3 tiers)');
-    }
-  }
 
   async getOrganigram() {
     return this.prisma.organigramNode.findMany({
